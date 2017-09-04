@@ -17,7 +17,10 @@ use common\models\CorpAgent;
  */
 class AuthController extends Controller
 {
-    public $enableCsrfValidation = false;    
+    /**
+     * @var bool
+     */
+    public $enableCsrfValidation = false;
     
     /*
     [
@@ -31,12 +34,19 @@ class AuthController extends Controller
     <xml><ToUserName><![CDATA[tj4a1744a4a878638f]]></ToUserName>
     <Encrypt><![CDATA[lY7+o/dRNf+ZxSq5S27Vujur9E9pf8C0leeNJ6A2VdZSuUXeRzFeaKw55Nj37K7W1SBHzAHpCFGUfeENmMqb06SBjL8RyBIVLbjFU/+YzHjEgQSCj5Hl2coIQwIo7Y3dAyuzHhxvqLcmqfhxqrWNRfvtjOALxjUMigrJ55hfCHUvkgksh6O229OdiApLks/fX0WBB1nlIxtUyvuq9Bw0XlO51gO/pY7lw58CQXXGkFl6yYfzkauAGuhsgQDyjwN/yTvIbPBBA68aWeRg4DFY5667ZVlrCP1DOr0JDy0gX0rGh4kA/RNrUBx0NnlocKIL9z5JLcnF6KgtyDnnnF17TrNvroY/MiEnMapGEjsqv17hW7G7fgbDHq4BmgL1hQJV]]></Encrypt>
     <AgentID><![CDATA[]]></AgentID>
-    </xml>  
-
-    http://127.0.0.1/wxe/backend/web/index.php?r=auth&sid=cys_meetings&msg_signature=15b8fda4ed73960ba24dfb5ac2a1f3f8393600a6&timestamp=1492671419&nonce=850142663&echostr=1dWk%2BX164z8hF9XumK2AfWZXZxs21uhZh44PFo44jLATqidO03fBov6TDiXqs4coOwL7Wqm4WdwaMZVThvpf6g%3D%3D    
-    http://wxe-admin.buy027.com/index.php?r=auth&sid=cys_worktime
-    http://wxe-admin.buy027.com/index.php?r=auth&sid=cys_meetings    
+    </xml>
     */
+    /**
+     * 系统事件接收URL, 套件在授权发生变化时，会推送一些事件过来，以下url就是用来处理这个事
+     *
+     * http://wxq-admin.buy027.com/index.php?r=auth&suite_sid=ezoa
+     * http://127.0.0.1/wxe/backend/web/index.php?r=auth&sid=cys_meetings&msg_signature=15b8fda4ed73960ba24dfb5ac2a1f3f8393600a6&timestamp=1492671419&nonce=850142663&echostr=1dWk%2BX164z8hF9XumK2AfWZXZxs21uhZh44PFo44jLATqidO03fBov6TDiXqs4coOwL7Wqm4WdwaMZVThvpf6g%3D%3D
+     * http://wxe-admin.buy027.com/index.php?r=auth&sid=cys_worktime
+     * http://wxe-admin.buy027.com/index.php?r=auth&sid=cys_meetings
+     *
+     * @param $suite_sid
+     * @return string
+     */
     public function actionIndex($suite_sid)
     {
         yii::error([$_GET, $_POST, file_get_contents("php://input")]);                
@@ -113,7 +123,8 @@ class AuthController extends Controller
             }
             $model->corp_id = $corp_id;
             $model->suite_id = $suite->suite_id;    
-            $model->permanent_code = $arr['permanent_code'];
+            $model->permanent_code = $arr['permanent_code'];
+
             $model->setAttributes($auth_corp_info);
             if (!$model->save(false)) {
                 yii::error(['save CorpSuite err', __METHOD__, __LINE__, $model->toArray(), $model->getErrors()]);
@@ -147,8 +158,16 @@ class AuthController extends Controller
         }
         
         return 'success';
-    }    
+    }
 
+    /**
+     * 每个Agent都有自己的: CallbackURL, 业务设置URL, 可信域名, 应用主页
+     *
+     * 当微信用户发消息时, 每个应用(agent)都要设置一个处理url, 支持$CORPID$模板变量
+     * http://wxe-admin.buy027.com/index.php?r=auth/callback&agent_sid=cys_meeting_agent_meeting&corpid=$CORPID$
+     * @param $agent_sid
+     * @return string
+     */
     public function actionCallback($agent_sid)
     {
         /*
@@ -220,7 +239,13 @@ class AuthController extends Controller
         return 'success';
     }
 
-    // http://wxe-admin.buy027.com/index.php?r=auth/business&agent_sid=cys_meeting_agent_meeting&corpid=$CORPID$&auth_code=1358d97022b2f8d1f3b38ff273636ea8
+    /**
+     * Agent级的, 业务设置URL, 好象不支持$CORPID$变量的
+     *
+     * http://wxe-admin.buy027.com/index.php?r=auth/business&agent_sid=cys_meeting_agent_meeting&corpid=$CORPID$&auth_code=1358d97022b2f8d1f3b38ff273636ea8
+     * @param $agent_sid
+     * @return string
+     */
     public function actionBusiness($agent_sid)
     {
         yii::error([$_GET, $_POST, file_get_contents("php://input")]);               

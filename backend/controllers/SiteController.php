@@ -15,7 +15,7 @@ class SiteController extends Controller
     /**
      * @inheritdoc
      */
-/*     
+
     public function behaviors()
     {
         return [
@@ -41,7 +41,7 @@ class SiteController extends Controller
             ],
         ];
     }
-*/
+
     /**
      * @inheritdoc
      */
@@ -56,13 +56,13 @@ class SiteController extends Controller
 
     /**
      * Displays homepage.
-     *
+     * /index.php?r=site&corpid=wxe675e8d30802ff44/9
      * @return string
      */
     public function actionIndex()
     {
         yii::error([$_GET, $_POST, file_get_contents("php://input")]); 
-//        Yii::$app->fileStorage->put('hbhe.txt', 'hello, world 123456');
+        //Yii::$app->fileStorage->put('hbhe.txt', 'hello, world 123456');
         return $this->render('index');
     }
 

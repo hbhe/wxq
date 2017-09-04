@@ -2089,7 +2089,7 @@ class QyWechat
         if ((!$json) || !empty($json['errcode'])) {
             $this->errCode = $json['errcode'];
             $this->errMsg = $json['errmsg'];
-            $this->log(print_r([__METHOD__, __LINE__, $json, $result], true)); 
+            $this->log(print_r([__METHOD__, __LINE__, $json, $result, $data], true));
             exit;
         }
         $this->suit_access_token = $json['suite_access_token'];

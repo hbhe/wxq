@@ -67,7 +67,7 @@ class SiteController extends Controller
 
     /**
      * Displays homepage.
-     *
+     * /index.php?r=site&corpid=wxe675e8d30802ff44/9
      * @return mixed
      */
     public function actionIndex()
