@@ -62,9 +62,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         yii::error([$_GET, $_POST, file_get_contents("php://input")]); 
-
-//        Yii::$app->fileStorage->put('hbhe.txt', 'hello, world 123456');     
-        if (YII_ENV_DEV) 
+//        Yii::$app->fileStorage->put('hbhe.txt', 'hello, world 123456');
         return $this->render('index');
     }
 
