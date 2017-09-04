@@ -54,6 +54,12 @@ class SiteController extends Controller
         ];
     }
 
+    /*
+    $_GET = [
+        'r' => 'site'
+        'corpid' => 'wxe675e8d30802ff44/1000004'
+    ]
+    */
     /**
      * Displays homepage.
      * /index.php?r=site&corpid=wxe675e8d30802ff44/9
@@ -61,7 +67,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        yii::error([$_GET, $_POST, file_get_contents("php://input")]); 
+        yii::error([__METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
         //Yii::$app->fileStorage->put('hbhe.txt', 'hello, world 123456');
         return $this->render('index');
     }
