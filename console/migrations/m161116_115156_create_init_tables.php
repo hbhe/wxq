@@ -15,7 +15,7 @@ class m161116_115156_create_init_tables extends Migration
         $this->createTable('{{%corp}}', [
             'id' => $this->primaryKey(),        
             'corp_id' => $this->string(128)->notNull()->defaultValue('')->unique(),
-            'corp_name' => $this->string(64),            
+            'corp_name' => $this->string(64)->comment('使用套件的客户'),
             'corp_type' => $this->string(64),            
             'corp_round_logo_url' => $this->string(512),            
             'corp_square_logo_url' => $this->string(512),            
@@ -24,40 +24,24 @@ class m161116_115156_create_init_tables extends Migration
             'corp_wxqrcode' => $this->string(512),            
             'corp_full_name' => $this->string(512),            
             'subject_type' => $this->integer()->notNull()->defaultValue(0),
-            'userid' => $this->string(32),                        
-            'mobile' => $this->string(32),            
-            'username' => $this->string()->unique(),            
+            'userid' => $this->string(32),
+            'mobile' => $this->string(32),
+            'username' => $this->string()->unique(),
             'auth_key' => $this->string(32),
             'password_hash' => $this->string(),
             'password_reset_token' => $this->string()->unique(),
             'email' => $this->string(64)->unique(),
-            'mobile' => $this->string(16)->unique(),
             'access_token' => $this->string(64),
             'status' => $this->smallInteger()->notNull()->defaultValue(0),
             'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
             'updated_at' => $this->timestamp()->defaultValue(null),            
         ], $tableOptions);        
 
-/*
-        $this->insert('{{%corp}}', [
-            'corp_id' => 'wx0b4f26d460868a25',
-            'username' => 'cys',
-            'password_hash'=>Yii::$app->getSecurity()->generatePasswordHash('cys'),
-            'auth_key'=>Yii::$app->getSecurity()->generateRandomString(),            
-        ]);        
-/*        
-        $this->insert('{{%corp}}', [
-            'corp_id' => 'wxe675e8d30802ff44',
-            'username' => 'hope',
-            'password_hash'=>Yii::$app->getSecurity()->generatePasswordHash('hope'),
-            'auth_key'=>Yii::$app->getSecurity()->generateRandomString(),            
-        ]);
-*/
         $this->createTable('{{%suite}}', [
             'id' => $this->primaryKey(),        
             'sid' => $this->string(32)->notNull()->defaultValue('')->unique(),
             'title' => $this->string(64),
-            'corp_id' => $this->string(128)->notNull()->defaultValue(''),
+            'corp_id' => $this->string(128)->notNull()->defaultValue(''), //
             'suite_id' => $this->string(128)->notNull()->defaultValue(''),
             'suite_secret' => $this->string(256)->notNull()->defaultValue(''),
             'suite_ticket' => $this->string(256)->notNull()->defaultValue(''),            
@@ -75,7 +59,7 @@ class m161116_115156_create_init_tables extends Migration
         $this->insert('{{%suite}}', [
             'title'=>'meeting',
             'sid' => 'cys_meeting',
-            'corp_id' => 'wx0b4f26d460868a25',            
+            'corp_id' => yii::$app->params['corp_id'],
             'suite_id' => 'tj8c2445c93840db09',
             'suite_secret' => '7lZbxTFWPeoMuLrxuXuA-9bGsOuKmS_6_A87VrKaEFc2divG7Uu8dh6O9BZey67T',
             'token' => 'FGPJTQK3vfXxNJh',
@@ -85,7 +69,7 @@ class m161116_115156_create_init_tables extends Migration
         $this->insert('{{%suite}}', [
             'title'=>'Culture',
             'sid' => 'cys_culture',
-            'corp_id' => 'wx0b4f26d460868a25',                        
+            'corp_id' => yii::$app->params['corp_id'],
             'suite_id' => 'tj4a1744a4a878638f',
             'suite_secret' => '3id-N4NUU_Gs6yGLz-b09J51hqUS25X0JXkgbYt37QOJ31Oz7wL6VAKhr4vbMX-U',
             'token' => 'JnSfFvpT',
@@ -95,8 +79,8 @@ class m161116_115156_create_init_tables extends Migration
         $this->createTable('{{%agent}}', [
             'id' => $this->primaryKey(),        
             'sid' => $this->string(64)->notNull()->defaultValue('')->unique(),             
-            'suite_id' => $this->string(128)->notNull()->defaultValue(''),            
-            'title' => $this->string(64),      
+            'suite_id' => $this->string(128)->notNull()->defaultValue('')->comment('所属套件'),
+            'title' => $this->string(64)->comment('应用名称'),
             'status' => $this->smallInteger()->notNull()->defaultValue(0),
             'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
             'updated_at' => $this->timestamp()->defaultValue(null),            
@@ -113,7 +97,6 @@ class m161116_115156_create_init_tables extends Migration
             'corp_id' => $this->string(128)->notNull()->defaultValue(''),
             'suite_id' => $this->string(128)->notNull()->defaultValue(''),
             'permanent_code' => $this->string(512)->defaultValue(''),                        
-//            'accessToken' => $this->string(512)->defaultValue(''),
             'status' => $this->smallInteger()->notNull()->defaultValue(0),
             'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
             'updated_at' => $this->timestamp()->defaultValue(null),            
@@ -365,3 +348,19 @@ class m161116_115156_create_init_tables extends Migration
     }
     */
 }
+
+/*
+        $this->insert('{{%corp}}', [
+            'corp_id' => 'wx0b4f26d460868a25',
+            'username' => 'cys',
+            'password_hash'=>Yii::$app->getSecurity()->generatePasswordHash('cys'),
+            'auth_key'=>Yii::$app->getSecurity()->generateRandomString(),
+        ]);
+
+        $this->insert('{{%corp}}', [
+            'corp_id' => 'wxe675e8d30802ff44',
+            'username' => 'hope',
+            'password_hash'=>Yii::$app->getSecurity()->generatePasswordHash('hope'),
+            'auth_key'=>Yii::$app->getSecurity()->generateRandomString(),
+        ]);
+*/
