@@ -34,8 +34,8 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'logVars' => ['_POST','_GET'],
-                    //'levels' => ['error', 'warning'],
-                    'levels' => ['error', 'warning', 'info', 'trace', 'profile'],
+                    'levels' => ['error', 'warning'],
+                    //'levels' => ['error', 'warning', 'info', 'trace', 'profile'],
                 ],
             ],
         ],
