@@ -46,3 +46,15 @@ create database wxq
 
 2. php yii migrate --migrationPath=@noam148/imagemanager/migrations
 3. php yii migrate/up   (php yii app/setup)
+
+
+
+
+应用(Agent)前台，即应用主页URL： 
+http://wxq-frontend.buy027.com/index.php?r=agent/frontend&agent_sid=ezoa-agent&corpid=$CORPID$&agentid=$AGENTID$
+如:
+
+应用(Agent)后台url, 即业务设置URL: 
+如: http://wxq-admin.buy027.com/index.php?r=auth/agent-backend&agent_sid=ezoa-agent&corpid=wxe675e8d30802ff44&auth_code=t3ArVy4uetdevIg8PBDl9ilL640sQ-Q6mfbQ6o4a8MCCGH7P5VAugz3SCUCiallsq6C1fvmbZPL3GJAtveWIOQ
+
+应用的消息callback url: http://wxq-admin.buy027.com/index.php?r=auth/agent-callback&agent_sid=ezoa-agent&corpid=$CORPID$
