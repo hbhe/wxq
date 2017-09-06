@@ -32,10 +32,12 @@ class AgentController extends Controller
     public function actionFrontend()
     {
         /*
-        $_GET = [
-            'r' => 'agent/frontend'
-            'corpid' => 'wxe675e8d30802ff44/1000004'
-        ]
+        [
+            'r' => 'agent/frontend',
+            'agent_sid' => 'ezoa-agent',
+            'corpid' => 'wxe675e8d30802ff44',
+            'agentid' => '1000007',
+        ],
         */
         Yii::error([__METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
 

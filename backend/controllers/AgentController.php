@@ -163,6 +163,15 @@ class AgentController extends Controller
             'Event' => 'subscribe',
             'EventKey' => '',
         ],
+        [
+            'ToUserName' => 'wxe675e8d30802ff44',
+            'FromUserName' => 'hhb',
+            'CreateTime' => '1504683490',
+            'MsgType' => 'text',
+            'Content' => 'aaaa',
+            'MsgId' => '100485148',
+            'AgentID' => '1000007',
+        ],
         */
         Yii::error([__METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
 
@@ -236,7 +245,7 @@ class AgentController extends Controller
      * Agent业务设置(Agent管理后台)URL, 支持$CORPID$变量
      * http://wxq-admin.buy027.com/index.php?r=agent/backend&agent_sid=ezoa-agent&corpid=$CORPID$
      *
-     * 例如：http://wxq-admin.buy027.com/index.php?r=agent/backend&agent_sid=ezoa-agent&corpid=wxe675e8d30802ff44&auth_code=t3ArVy4uetdevIg8PBDl9ilL640sQ-Q6mfbQ6o4a8MCCGH7P5VAugz3SCUCiallsq6C1fvmbZPL3GJAtveWIOQ
+     * 例如：http://wxq-admin.buy027.com/index.php?r=agent/backend&agent_sid=ezoa-agent&corpid=wxe675e8d30802ff44&auth_code=t3ArVy4uetdevIg8PBDl9ilL640sQ-Q6mfbQ6o4a8MD6gPu0v55fftS1H0csGmsP6cov69Bd5QV7UuL_PHTxKevZRGTUtQ6QKyfwGVELFxM
      * @param $agent_sid
      * @return string
      */
@@ -247,8 +256,8 @@ class AgentController extends Controller
             'r' => 'agent/backend',
             'agent_sid' => 'ezoa-agent',
             'corpid' => 'wxe675e8d30802ff44',
-            'auth_code' => 't3ArVy4uetdevIg8PBDl9ilL640sQ-Q6mfbQ6o4a8MCCGH7P5VAugz3SCUCiallsq6C1fvmbZPL3GJAtveWIOQ',
-        ]
+            'auth_code' => 't3ArVy4uetdevIg8PBDl9ilL640sQ-Q6mfbQ6o4a8MD6gPu0v55fftS1H0csGmsP6cov69Bd5QV7UuL_PHTxKevZRGTUtQ6QKyfwGVELFxM',
+        ],
         */
         Yii::error([__METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
 
