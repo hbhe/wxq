@@ -193,13 +193,13 @@ class AuthController extends Controller
 
         $agent = Agent::findOne(['sid' => $agent_sid]);       
         if (null === $agent) {
-            yii::error([$_GET, $_POST, file_get_contents("php://input")]);      
+            yii::error(['invalid agent', $_GET, $_POST, file_get_contents("php://input")]);
             yii::$app->end();
         }
         
         $suite = $agent->suite;
         if (!$suite) {
-            yii::error([$_GET, $_POST, file_get_contents("php://input")]);      
+            yii::error(['invalid suite', $_GET, $_POST, file_get_contents("php://input")]);
             yii::$app->end();
         }
         

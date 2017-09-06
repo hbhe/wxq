@@ -63,8 +63,6 @@ class SiteController extends Controller
     /**
      * 应用主页url
      * http://wxq-admin.buy027.com/index.php?r=site&corpid=$CORPID$/$AGENTID$
-     * Displays homepage.
-     * /index.php?r=site&corpid=wxe675e8d30802ff44/9
      * @return string
      */
     public function actionIndex()
