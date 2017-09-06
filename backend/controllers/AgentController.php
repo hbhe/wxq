@@ -172,6 +172,64 @@ class AgentController extends Controller
             'MsgId' => '100485148',
             'AgentID' => '1000007',
         ],
+        [
+            'ToUserName' => 'wxe675e8d30802ff44',
+            'FromUserName' => 'hhb',
+            'CreateTime' => '1504688714',
+            'MsgType' => 'event',
+            'AgentID' => '1000007',
+            'Event' => 'click',
+            'EventKey' => 'MENU-A1',
+        ],
+        [
+            'ToUserName' => 'wxe675e8d30802ff44',
+            'FromUserName' => 'hhb',
+            'CreateTime' => '1504688778',
+            'MsgType' => 'event',
+            'AgentID' => '1000007',
+            'Event' => 'view',
+        ],
+        [
+            'ToUserName' => 'wxe675e8d30802ff44',
+            'FromUserName' => 'hhb',
+            'CreateTime' => '1504689988',
+            'MsgType' => 'event',
+            'AgentID' => '1000009',
+            'Event' => 'enter_agent',
+            'EventKey' => '',
+        ],
+        [
+            'ToUserName' => 'wxe675e8d30802ff44',
+            'FromUserName' => 'hhb',
+            'CreateTime' => '1504690379',
+            'MsgType' => 'event',
+            'AgentID' => '1000009',
+            'Event' => 'pic_photo_or_album',
+            'EventKey' => 'photo',
+            'SendPicsInfo' => '',
+        ],
+        [
+            'ToUserName' => 'wxe675e8d30802ff44',
+            'FromUserName' => 'hhb',
+            'CreateTime' => '1504690522',
+            'MsgType' => 'event',
+            'AgentID' => '1000009',
+            'Event' => 'location_select',
+            'EventKey' => 'LOCATE',
+            'SendLocationInfo' => '',
+        ],
+        [
+            'ToUserName' => 'wxe675e8d30802ff44',
+            'FromUserName' => 'hhb',
+            'CreateTime' => '1504690522',
+            'MsgType' => 'location',
+            'Location_X' => '30.6456',
+            'Location_Y' => '114.2',
+            'Scale' => '0',
+            'Label' => '联通路',
+            'MsgId' => '1846401394',
+            'AgentID' => '1000009',
+        ],
         */
         Yii::error([__METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
 
@@ -214,26 +272,47 @@ class AgentController extends Controller
 
         $we->getRev();
         $data = $we->getRevData();
-        Yii::error(['data', $data]);
-        if (isset($data['Event']) && 'subscribe' == $data['Event']) {
-            $model = CorpAgent::findOne(['corp_id' => $data['ToUserName'], 'agent_id' => $agent->id]);
-            if (null === $model) {
-                $model = new CorpAgent();
-                $model->corp_id = $data['ToUserName'];
-                $model->agent_id = $agent->id;
-                if (!$model->save()) {
-                    Yii::error(['save CorpAgent err', __METHOD__, __LINE__, $model->getErrors()]);
-                } else Yii::error('save CorpAgent ok' . $agent->id);
+        Yii::error(['data', __METHOD__, __LINE__, $data]);
+        if (isset($data['Event'])) {
+            if ('subscribe' == $data['Event']) {
+                $model = CorpAgent::findOne(['corp_id' => $data['ToUserName'], 'agent_id' => $agent->id]);
+                if (null === $model) {
+                    $model = new CorpAgent();
+                    $model->corp_id = $data['ToUserName'];
+                    $model->agent_id = $agent->id;
+                    if (!$model->save()) {
+                        Yii::error(['save CorpAgent err', __METHOD__, __LINE__, $model->getErrors()]);
+                    } else Yii::error('save CorpAgent ok' . $agent->id);
+                }
+
+                $model = CorpSuite::findOne(['corp_id' => $data['ToUserName'], 'suite_id' => $suite->suite_id]);
+                if (null === $model) {
+                    $model = new CorpSuite();
+                    $model->corp_id = $data['ToUserName'];
+                    $model->suite_id = $suite->suite_id;
+                    if (!$model->save()) {
+                        Yii::error(['save CorpSuite err', __METHOD__, __LINE__, $model->getErrors()]);
+                    }
+                }
             }
 
-            $model = CorpSuite::findOne(['corp_id' => $data['ToUserName'], 'suite_id' => $suite->suite_id]);
-            if (null === $model) {
-                $model = new CorpSuite();
-                $model->corp_id = $data['ToUserName'];
-                $model->suite_id = $suite->suite_id;
-                if (!$model->save()) {
-                    Yii::error(['save CorpSuite err', __METHOD__, __LINE__, $model->getErrors()]);
-                }
+            // 每次进入消息对话框时
+            if ('enter_agent' == $data['Event']) {
+            }
+
+            if ('image' == $data['Event']) {
+                /*
+                [
+                    'ToUserName' => 'wxe675e8d30802ff44',
+                    'FromUserName' => 'hhb',
+                    'CreateTime' => '1504690157',
+                    'MsgType' => 'image',
+                    'PicUrl' => 'http://p.qpic.cn/pic_wework/3514736824/abad63a3509c39a1a66ac630c4aac8f28bcf863eb594d283/',
+                    'MsgId' => '1222858184',
+                    'MediaId' => '1OXzjX8lhLIWERInWB7SzeFPmvUug64mjHQ_KnnoD5YM',
+                    'AgentID' => '1000009',
+                ],
+                */
             }
 
         }
