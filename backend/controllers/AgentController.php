@@ -128,7 +128,7 @@ class AgentController extends Controller
     }
 
     /**
-     * 当微信用户发消息时, 每个应用(Agent)都要设置一个处理url来处理消息, 支持$CORPID$模板变量
+     * 当微信用户发消息时, 每个应用(Agent)都要设置一个处理url来处理消息, 支持$CORPID$模板变量, 不过url参数中这个corpid是服务商的corpid,没什么用? ToUserName才是使用者企业corpid
      * http://wxq-admin.buy027.com/index.php?r=agent/callback&agent_sid=ezoa-agent&corpid=$CORPID$
      *
      * @return string
@@ -137,12 +137,13 @@ class AgentController extends Controller
     {
         /*
         [
-            'r' => 'auth/callback',
+            'r' => 'agent/callback',
+            'agent_sid' => 'ezoa-agent',
             'corpid' => 'wx0b4f26d460868a25',
-            'msg_signature' => 'cba9794f8f87a7abb9df1f19f94d6da0afdacdce',
-            'timestamp' => '1492662188',
-            'nonce' => '1417942269',
-            'echostr' => 'HEFucIQmdSR7RtbIaFi6RhEAClGcCSNaCPzZORXGwIsSd0EPBd0EJNGX0inA3dddc8bmHWeTZm7dUThw/G6ReA==',
+            'msg_signature' => '1bca8057e4f3f9ec1c39741e936f3f69a5726d85',
+            'timestamp' => '1504680998',
+            'nonce' => '15365629',
+            'echostr' => 'PnCGxCL4fQbBaWznBVh9+OMa5HwEmaSPKTrBewU4O0XcfVaUyfuX7anTil9PP6c/LtQN2zVwobQSEl8gcAv6gQ==',
         ],
         [
             'r' => 'auth/callback'
@@ -164,15 +165,15 @@ class AgentController extends Controller
         */
         Yii::error([__METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
 
+        if (empty($agent_sid = Yii::$app->request->get('agent_sid'))) {
+            Yii::error(['no agent_id parameter', __METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
+            throw new Exception('no agent_id parameter');
+        }
+/*
         if (empty($corpid = Yii::$app->request->get('corpid'))) {
             Yii::error(['no corpid parameter', __METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
             //throw new Exception('no corpid parameter');
             Yii::$app->end();
-        }
-
-        if (empty($agent_sid = Yii::$app->request->get('agent_sid'))) {
-            Yii::error(['no agent_id parameter', __METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
-            throw new Exception('no agent_id parameter');
         }
 
         $corp = Corp::findOne(['corp_id' => $corpid]);
@@ -180,7 +181,7 @@ class AgentController extends Controller
             Yii::error(['no corp', __METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
             throw new Exception('no corp');
         }
-
+*/
         $agent = Agent::findOne(['sid' => $agent_sid]);
         if ($agent === null) {
             Yii::error(['no agent', __METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
