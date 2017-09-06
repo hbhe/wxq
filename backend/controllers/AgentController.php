@@ -162,11 +162,12 @@ class AgentController extends Controller
             'EventKey' => '',
         ],
         */
-        Yii::error([$_GET, $_POST, file_get_contents("php://input")]);
+        Yii::error([__METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
 
         if (empty($corpid = Yii::$app->request->get('corpid'))) {
             Yii::error(['no corpid parameter', __METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
-            throw new Exception('no corpid parameter');
+            //throw new Exception('no corpid parameter');
+            Yii::$app->end();
         }
 
         if (empty($agent_sid = Yii::$app->request->get('agent_sid'))) {
@@ -245,7 +246,7 @@ class AgentController extends Controller
             'auth_code' => 't3ArVy4uetdevIg8PBDl9ilL640sQ-Q6mfbQ6o4a8MCCGH7P5VAugz3SCUCiallsq6C1fvmbZPL3GJAtveWIOQ',
         ]
         */
-        Yii::error([$_GET, $_POST, file_get_contents("php://input")]);
+        Yii::error([__METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
 
         if (empty($corpid = Yii::$app->request->get('corpid'))) {
             Yii::error(['no corpid parameter', __METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
