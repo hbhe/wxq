@@ -45,8 +45,8 @@ class CorpAgent extends \common\wosotech\base\ActiveRecord
         return [
             'id' => 'ID',
             'corp_id' => 'Corp ID',
-            'agentid' => 'AgentID',        // Ê¹ÓÃ·½Ó¦ÓÃÊµÀýID, Ã¿°²×°Ò»¸öÓ¦ÓÃ, ÆóÒµºÅ¾ÍÎªËü·ÖÅäÒ»¸öid, ´Ó1¿ªÊ¼
-            'agent_id' => 'Agent ID',       // ±íÃ÷´ËÓ¦ÓÃÊôÓÚÄÄ¸öAgentÓ¦ÓÃ, ²»Í¬µÄÆóÒµ°²×°Í¬Ò»¸öÓ¦ÓÃÊ±, agent_idÏàµÈ,¶øagentid²»µÈ
+            'agentid' => 'AgentID',        // ä½¿ç”¨æ–¹åº”ç”¨å®žä¾‹ID, æ¯å®‰è£…ä¸€ä¸ªåº”ç”¨, ä¼ä¸šå·å°±ä¸ºå®ƒåˆ†é…ä¸€ä¸ªid, ä»Ž1å¼€å§‹
+            'agent_id' => 'Agent ID',       // è¡¨æ˜Žæ­¤åº”ç”¨å±žäºŽå“ªä¸ªAgentåº”ç”¨, ä¸åŒçš„ä¼ä¸šå®‰è£…åŒä¸€ä¸ªåº”ç”¨æ—¶, agent_idç›¸ç­‰,è€Œagentidä¸ç­‰
             'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

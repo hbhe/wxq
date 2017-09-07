@@ -47,12 +47,12 @@ class Agent extends \common\wosotech\base\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'sid' => 'Sid',
-            'suite_id' => 'Suite ID',
-            'title' => 'Title',
-            'status' => 'Status',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'sid' => '编码',
+            'suite_id' => '套件ID',
+            'title' => '标题',
+            'status' => '状态 ',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 

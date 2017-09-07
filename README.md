@@ -2,16 +2,18 @@
 
 
 安装步骤:
-1. 先clone到本地后, 执行composer install (如果很慢，直接copy一份vendor)
+1. 先clone到本地后, 执行composer install
 2. php init
+3. 创建db, 如create database wxq
+4. php yii migrate --migrationPath=@noam148/imagemanager/migrations
+5. php yii migrate/up
 
-create database wxq
+登录后台
+http://127.0.0.1/wxq/backend/web/index.php 
+用户名: webmaster, 密码: webmaster
 
-2. php yii migrate --migrationPath=@noam148/imagemanager/migrations
-3. php yii migrate/up
 
-
-如何创建套件
+如何创建套件? 
 0. 修改common/config/params.php, 将corp_id设置成套件开发商自己的corpid, 如'corp_id' => 'wx0b4f26d460868111', 
 1. 在wxq后台创建suite, 注意要输入suite_sid（建议选一个例于记忆的字符串,如ezoa）, Token(随便输入如1111), EncodingAESKey（输入43位长的随机字符串如1234567890123456789012345678901234567890123）， SuiteID, SuiteSecret 先空着不用填, 点创建    
 2. 在企业号服务商管理后台->应用套件->创建应用套件，输入

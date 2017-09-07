@@ -35,11 +35,11 @@
                 'items' => [
                     //['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
                     ['label' => '首页', 'icon' => 'fa fa-home', 'url' => ['/home']],                    
-                    ['label' => '客户', 'icon' => 'fa fa-users', 'url' => ['/corp']],
                     ['label' => '套件', 'icon' => 'fa fa-users', 'url' => ['/suite']],
-                    ['label' => '组件', 'icon' => 'fa fa-users', 'url' => ['/agent']],                    
+                    ['label' => '应用', 'icon' => 'fa fa-users', 'url' => ['/agent']],
+                    ['label' => '客户', 'icon' => 'fa fa-users', 'url' => ['/corp']],
                     ['label' => '客户使用套件', 'icon' => 'fa fa-users', 'url' => ['/corp-suite']],
-                    ['label' => '客户使用组件', 'icon' => 'fa fa-users', 'url' => ['/corp-agent']],
+                    ['label' => '客户使用应用', 'icon' => 'fa fa-users', 'url' => ['/corp-agent']],
 
 
 //                    ['label' => '应用列表', 'icon' => 'fa fa-users', 'url' => ['/gh']],

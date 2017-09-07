@@ -70,8 +70,8 @@ class Corp extends \common\wosotech\base\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'corp_id' => 'Corp ID',
-            'corp_name' => 'Corp Name',
+            'corp_id' => '企业ID',
+            'corp_name' => '名称',
             'corp_type' => 'Corp Type',
             'corp_round_logo_url' => 'Corp Round Logo Url',
             'corp_square_logo_url' => 'Corp Square Logo Url',
@@ -88,9 +88,9 @@ class Corp extends \common\wosotech\base\ActiveRecord
             'password_reset_token' => 'Password Reset Token',
             'email' => 'Email',
             'access_token' => 'Access Token',
-            'status' => 'Status',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'status' => '状态 ',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 

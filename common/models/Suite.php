@@ -60,17 +60,17 @@ class Suite extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'sid' => 'Sid',
-            'title' => 'Title',
-            'corp_id' => 'Corp ID',
-            'suite_id' => 'Suite ID',
-            'suite_secret' => 'Suite Secret',
-            'suite_ticket' => 'Suite Ticket',
+            'sid' => '编码',
+            'title' => '标题',
+            'corp_id' => '企业ID',
+            'suite_id' => '套件ID',
+            'suite_secret' => '套件Secret',
+            'suite_ticket' => '套件Ticket',
             'token' => 'Token',
-            'encodingAESKey' => 'Encoding Aeskey',
-            'status' => 'Status',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'encodingAESKey' => '加解密密钥',
+            'status' => '状态 ',
+            'created_at' => '创建时间',
+            'updated_at' => '更新时间',
         ];
     }
 
