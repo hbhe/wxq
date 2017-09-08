@@ -4,7 +4,7 @@
 安装步骤:
 1. 先clone到本地后, 执行composer install
 2. php init
-3. 创建db, 如create database wxq
+3. 创建db, 如create database wxq, 编辑main-local.php, params-local.php(把密码和隐私参数放在local中)
 4. php yii migrate --migrationPath=@noam148/imagemanager/migrations
 5. php yii migrate/up
 
