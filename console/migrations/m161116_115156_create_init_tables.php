@@ -338,30 +338,5 @@ class m161116_115156_create_init_tables extends Migration
         $this->dropTable('{{%corp_agent}}');
     }
 
-    /*
-    // Use safeUp/safeDown to run migration code within a transaction
-    public function safeUp()
-    {
-    }
-
-    public function safeDown()
-    {
-    }
-    */
 }
 
-/*
-        $this->insert('{{%corp}}', [
-            'corp_id' => 'wx0b4f26d460868a25',
-            'username' => 'cys',
-            'password_hash'=>Yii::$app->getSecurity()->generatePasswordHash('cys'),
-            'auth_key'=>Yii::$app->getSecurity()->generateRandomString(),
-        ]);
-
-        $this->insert('{{%corp}}', [
-            'corp_id' => 'wxe675e8d30802ff44',
-            'username' => 'hope',
-            'password_hash'=>Yii::$app->getSecurity()->generatePasswordHash('hope'),
-            'auth_key'=>Yii::$app->getSecurity()->generateRandomString(),
-        ]);
-*/

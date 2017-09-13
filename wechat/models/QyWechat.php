@@ -1397,6 +1397,32 @@ class QyWechat
                 $this->errMsg = $json['errmsg'];
                 return false;
             }
+            /*
+            [
+                'errcode' => 0,
+                'errmsg' => 'ok',
+                'department' => [
+                    [
+                        'id' => 1,
+                        'name' => '武汉xxxx',
+                        'parentid' => 0,
+                        'order' => 2147483447,
+                    ],
+                    [
+                        'id' => 2,
+                        'name' => '市场部',
+                        'parentid' => 1,
+                        'order' => 100000000,
+                    ],
+                    [
+                        'id' => 3,
+                        'name' => '技术部',
+                        'parentid' => 1,
+                        'order' => 99999000,
+                    ],
+                ],
+            ]
+            */
             return $json;
         }
         return false;
