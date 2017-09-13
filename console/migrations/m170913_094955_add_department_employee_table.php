@@ -58,12 +58,13 @@ class m170913_094955_add_department_employee_table extends Migration
         $this->createTable('{{%department_employee}}', [
             'id' => $this->primaryKey(),
             'corp_id' => $this->string(128),
-            'department_id' => $this->integer()->notNull(),
+            'department_id' => $this->string(128),
             'employee_id' => $this->integer()->notNull(),
             'sort_order' => $this->integer()->notNull()->defaultValue(0)->comment('排序'), // 员工在部门内的排序
             'status' => $this->smallInteger()->notNull()->defaultValue(0),
         ]);
-
+        $this->createIndex('department_id', '{{%department_employee}}', ['department_id']);
+        $this->createIndex('employee_id', '{{%department_employee}}', ['employee_id']);
     }
 
     public function down()

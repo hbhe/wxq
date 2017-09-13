@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\base\Exception;
 
 /**
  * This is the model class for table "{{%corp_suite}}".
@@ -111,8 +112,35 @@ class CorpSuite extends \common\wosotech\base\ActiveRecord
      */
     public function importDepartment()
     {
-        $we = $this->getQyWechat();
-        $rows = $we->getDepartment();
+        if (YII_ENV_DEV) {
+            $rows = [
+                'errcode' => 0,
+                'errmsg' => 'ok',
+                'department' => [
+                    [
+                        'id' => 1,
+                        'name' => '武汉xxxx',
+                        'parentid' => 0,
+                        'order' => 2147483447,
+                    ],
+                    [
+                        'id' => 2,
+                        'name' => '市场部',
+                        'parentid' => 1,
+                        'order' => 100000000,
+                    ],
+                    [
+                        'id' => 3,
+                        'name' => '技术部',
+                        'parentid' => 1,
+                        'order' => 99999000,
+                    ],
+                ],
+            ];
+        } else {
+            $we = $this->getQyWechat();
+            $rows = $we->getDepartment();
+        }
         Department::deleteAll(['corp_id' => $this->corp_id]);
         foreach ($rows['department'] as $row) {
             $model = new Department();
@@ -155,40 +183,75 @@ class CorpSuite extends \common\wosotech\base\ActiveRecord
      */
     public function importEmployee()
     {
-        $we = $this->getQyWechat();
-        $rows = $we->getUserListInfo(1, 1); // 获取department_id = 1（即所有）员工
-        Yii::error($rows);
-        return;
-
-        /*
-        *    "userlist": [
-     *            {
-            *                   "userid": "zhangsan",
-     *                   "name": "李四",
-     *                   "department": [1, 2],
-     *                   "position": "后台工程师",
-     *                   "mobile": "15913215421",
-     *                   "gender": 1,     //性别。gender=0表示男，=1表示女
-     *                   "tel": "62394",
-     *                   "email": "zhangsan@gzdev.com",
-     *                   "weixinid": "lisifordev",        //微信号
-     *                   "avatar": "http://wx.qlogo.cn/mmopen/ajNVdqHZLLA3W..../0",   //头像url。注：如果要获取小图将url最后的"/0"改成"/64"即可
-     *                   "status": 1      //关注状态: 1=已关注，2=已冻结，4=未关注
-            *                   "extattr": {"attrs":[{"name":"爱好","value":"旅游"},{"name":"卡号","value":"1234567234"}]}
-     *            }
-     *      ]
-        */
+        if (YII_ENV_DEV) {
+            $rows = [
+                'errcode' => 0,
+                'errmsg' => 'ok',
+                'userlist' => [
+                    [
+                        'userid' => 'maxcvw',
+                        'name' => 'caolei',
+                        'department' => [
+                            1, 2, 3
+                        ],
+                        'position' => '主管',
+                        'gender' => '1',
+                        'avatar' => 'http://p.qlogo.cn/bizmail/7KelGzSoy1RljgcMIiaomSVSKMzQlceq9gBicTVZ5yMvViblcGoOLdXIg/0',
+                        'status' => 1,
+                        'isleader' => 1,
+                        'english_name' => 'jack',
+                        'order' => [
+                            0, 1
+                        ],
+                    ],
+                    [
+                        'userid' => 'fire-v',
+                        'name' => 'xxx',
+                        'department' => [
+                            2,
+                        ],
+                        'position' => '后端开发',
+                        'gender' => '1',
+                        'avatar' => 'http://shp.qpic.cn/bizmp/YI2BzCzzDnbKoq9ryhWtxNM3JMrAMDCFM5DMtVDwQlaoH9NhCxibtvg/',
+                        'status' => 1,
+                        'isleader' => 0,
+                        'english_name' => 'tom',
+                        'order' => [
+                            10,
+                        ],
+                    ]
+                ],
+            ];
+        } else {
+            $we = $this->getQyWechat();
+            $rows = $we->getUserListInfo(1, 1); // 获取department_id = 1（即所有）员工
+        }
         Employee::deleteAll(['corp_id' => $this->corp_id]);
+        DepartmentEmployee::deleteAll(['corp_id' => $this->corp_id]);
         foreach ($rows['userlist'] as $row) {
             $model = new Employee();
             $model->setAttributes($row);
             $model->corp_id = $this->corp_id;
-            //$model->name = $row['name'];
-            //$model->id = implode('-', [$this->corp_id, $row['id']]);
-            //$model->sort_order = $row['order'];
             if (!$model->save()) {
                 Yii::error(['save db error', __METHOD__, __LINE__, $model->getErrors()]);
                 throw new Exception('save db error');
+            }
+            $departments = $row['department'];
+            $orders = $row['order'];
+            foreach ($departments as $index => $id) {
+                $department_id = implode('-', [$this->corp_id, $id]);
+                $ar = DepartmentEmployee::findOne(['department_id' => $department_id, 'employee_id' => $model->id]);
+                if ($ar === null) {
+                    $ar = new DepartmentEmployee();
+                    $ar->corp_id = $this->corp_id;
+                    $ar->department_id = $department_id;
+                    $ar->employee_id = $model->id;
+                    $ar->sort_order = empty($orders[$index]) ? 0 : $orders[$index];
+                    if (!$ar->save()) {
+                        Yii::error(['save db error', __METHOD__, __LINE__, $ar->getErrors()]);
+                        throw new Exception('save db error');
+                    }
+                }
             }
 
         }

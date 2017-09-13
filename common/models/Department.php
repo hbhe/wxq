@@ -72,4 +72,8 @@ class Department extends \yii\db\ActiveRecord
         return new DepartmentQuery(get_called_class());
     }
 
+    public function getEmployees()
+    {
+        return $this->hasMany(Employee::className(), ['id' => 'employee_id'])->viaTable('{{%department_employee}}', ['department_id' => 'id']);
+    }
 }
