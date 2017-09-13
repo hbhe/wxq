@@ -1,7 +1,7 @@
 <?php
 
 use yii\db\Schema;
-use jamband\schemadump\Migration;
+use yii\db\Migration;
 
 class m170913_094955_add_department_employee_table extends Migration
 {
