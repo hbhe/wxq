@@ -12,7 +12,7 @@
             <div class="pull-left info">
                 <p>Alexander Pierce</p>
 
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                <a href="#"><i class="circle text-success"></i> Online</a>
             </div>
         </div>
 
@@ -21,7 +21,7 @@
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search..."/>
               <span class="input-group-btn">
-                <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i>
+                <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="search"></i>
                 </button>
               </span>
             </div>
@@ -34,40 +34,37 @@
                 'options' => ['class' => 'sidebar-menu'],
                 'items' => [
                     //['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
-                    ['label' => '首页', 'icon' => 'fa fa-home', 'url' => ['/home']],                    
-                    ['label' => '套件', 'icon' => 'fa fa-users', 'url' => ['/suite']],
-                    ['label' => '应用', 'icon' => 'fa fa-users', 'url' => ['/agent']],
-                    ['label' => '客户', 'icon' => 'fa fa-users', 'url' => ['/corp']],
-                    ['label' => '客户使用套件', 'icon' => 'fa fa-users', 'url' => ['/corp-suite']],
-                    ['label' => '客户使用应用', 'icon' => 'fa fa-users', 'url' => ['/corp-agent']],
-                    ['label' => '部门', 'icon' => 'fa fa-circle-o', 'url' => ['/department']],
-                    ['label' => '员工', 'icon' => 'fa fa-users', 'url' => ['/employee']],
+                    ['label' => '首页', 'icon' => 'dashboard', 'url' => ['/home']],
+                    ['label' => '套件', 'icon' => 'file-code-o', 'url' => ['/suite']],
+                    ['label' => '应用', 'icon' => 'users', 'url' => ['/agent']],
+                    ['label' => '客户', 'icon' => 'users', 'url' => ['/corp']],
+                    ['label' => '客户使用套件', 'icon' => 'users', 'url' => ['/corp-suite']],
+                    ['label' => '客户使用应用', 'icon' => 'share', 'url' => ['/corp-agent']],
+                    ['label' => '部门', 'icon' => 'home', 'url' => ['/department']],
+                    ['label' => '员工', 'icon' => 'circle-o', 'url' => ['/employee']],
 
-
-//                    ['label' => '应用列表', 'icon' => 'fa fa-users', 'url' => ['/gh']],
-                    ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
-                    ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                     [
+                        'visible' => false,
                         'label' => 'Same tools',
-                        'icon' => 'fa fa-share',
+                        'icon' => 'share',
                         'url' => '#',
                         'items' => [
-                            ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii'],],
-                            ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug'],],
+                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii'],],
+                            ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug'],],
                             [
                                 'label' => 'Level One',
-                                'icon' => 'fa fa-circle-o',
+                                'icon' => 'circle-o',
                                 'url' => '#',
                                 'items' => [
-                                    ['label' => 'Level Two', 'icon' => 'fa fa-circle-o', 'url' => '#',],
+                                    ['label' => 'Level Two', 'icon' => 'circle-o', 'url' => '#',],
                                     [
                                         'label' => 'Level Two',
-                                        'icon' => 'fa fa-circle-o',
+                                        'icon' => 'circle-o',
                                         'url' => '#',
                                         'items' => [
-                                            ['label' => 'Level Three', 'icon' => 'fa fa-circle-o', 'url' => '#',],
-                                            ['label' => 'Level Three', 'icon' => 'fa fa-circle-o', 'url' => '#',],
+                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
+                                            ['label' => 'Level Three', 'icon' => 'circle-o', 'url' => '#',],
                                         ],
                                     ],
                                 ],
