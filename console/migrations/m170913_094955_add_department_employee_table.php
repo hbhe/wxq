@@ -52,7 +52,7 @@ class m170913_094955_add_department_employee_table extends Migration
             'status' => $this->smallInteger()->notNull()->defaultValue(1)->comment('状态'), // 激活状态: 1=已激活，2=已禁用，4=未激活 已激活代表已激活企业微信或已关注微信插件。未激活代表既未激活企业微信又未关注微信插件。
             'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
             'updated_at' => $this->timestamp()->defaultValue(null),
-        ]);
+        ], $tableOptions);
         $this->createIndex('mobile', '{{%employee}}', ['mobile'], true);
 
         $this->createTable('{{%department_employee}}', [
@@ -62,7 +62,7 @@ class m170913_094955_add_department_employee_table extends Migration
             'employee_id' => $this->integer()->notNull(),
             'sort_order' => $this->integer()->notNull()->defaultValue(0)->comment('排序'), // 员工在部门内的排序
             'status' => $this->smallInteger()->notNull()->defaultValue(0),
-        ]);
+        ], $tableOptions);
         $this->createIndex('department_id', '{{%department_employee}}', ['department_id']);
         $this->createIndex('employee_id', '{{%department_employee}}', ['employee_id']);
     }

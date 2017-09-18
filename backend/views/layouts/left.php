@@ -40,6 +40,8 @@
                     ['label' => '客户', 'icon' => 'fa fa-users', 'url' => ['/corp']],
                     ['label' => '客户使用套件', 'icon' => 'fa fa-users', 'url' => ['/corp-suite']],
                     ['label' => '客户使用应用', 'icon' => 'fa fa-users', 'url' => ['/corp-agent']],
+                    ['label' => '部门', 'icon' => 'fa fa-circle-o', 'url' => ['/department']],
+                    ['label' => '员工', 'icon' => 'fa fa-users', 'url' => ['/employee']],
 
 
 //                    ['label' => '应用列表', 'icon' => 'fa fa-users', 'url' => ['/gh']],
