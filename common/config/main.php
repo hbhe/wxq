@@ -8,8 +8,8 @@ return [
         'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=wxq',
-            'username' => 'root',
-            'password' => '',
+            'username' => 'xxx',
+            'password' => 'xxx',
             'charset' => 'utf8',
             'tablePrefix' => 'wxq_',
             'enableSchemaCache' => YII_ENV_PROD,            

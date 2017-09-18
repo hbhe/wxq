@@ -2,7 +2,9 @@
 
 namespace console\controllers;
 
+use common\models\Department;
 use Yii;
+use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use common\models\WxGh;
@@ -107,8 +109,7 @@ class TestController extends \yii\console\Controller
     public function actionGetDepartment()
     {
         $model = CorpSuite::findOne(['corp_id' => 'wxe675e8d30802ff44', 'suite_id' => 'tj6fa3713d6ad487a1']);
-        $we = $model->getQyWechat();
-        $rows = $we->getDepartment();
-        yii::error($rows);
+        $model->importDepartment();
+        $model->importEmployee();
     }
 }

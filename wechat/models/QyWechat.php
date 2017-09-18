@@ -1397,6 +1397,32 @@ class QyWechat
                 $this->errMsg = $json['errmsg'];
                 return false;
             }
+            /*
+            [
+                'errcode' => 0,
+                'errmsg' => 'ok',
+                'department' => [
+                    [
+                        'id' => 1,
+                        'name' => '武汉xxxx',
+                        'parentid' => 0,
+                        'order' => 2147483447,
+                    ],
+                    [
+                        'id' => 2,
+                        'name' => '市场部',
+                        'parentid' => 1,
+                        'order' => 100000000,
+                    ],
+                    [
+                        'id' => 3,
+                        'name' => '技术部',
+                        'parentid' => 1,
+                        'order' => 99999000,
+                    ],
+                ],
+            ]
+            */
             return $json;
         }
         return false;
@@ -1643,6 +1669,46 @@ class QyWechat
                 $this->errMsg = $json['errmsg'];
                 return false;
             }
+            /*
+            [
+                'errcode' => 0,
+                'errmsg' => 'ok',
+                'userlist' => [
+                    [
+                        'userid' => 'maxcvw',
+                        'name' => 'caolei',
+                        'department' => [
+                            1,
+                        ],
+                        'position' => '',
+                        'gender' => '1',
+                        'avatar' => 'http://p.qlogo.cn/bizmail/7KelGzSoy1RljgcMIiaomSVSKMzQlceq9gBicTVZ5yMvViblcGoOLdXIg/0',
+                        'status' => 1,
+                        'isleader' => 0,
+                        'english_name' => '',
+                        'order' => [
+                            0,
+                        ],
+                    ],
+                    [
+                        'userid' => 'fire-v',
+                        'name' => 'xxx',
+                        'department' => [
+                            1,
+                        ],
+                        'position' => '',
+                        'gender' => '1',
+                        'avatar' => 'http://shp.qpic.cn/bizmp/YI2BzCzzDnbKoq9ryhWtxNM3JMrAMDCFM5DMtVDwQlaoH9NhCxibtvg/',
+                        'status' => 1,
+                        'isleader' => 0,
+                        'english_name' => '',
+                        'order' => [
+                            0,
+                        ],
+                    ]
+                ],
+            ]
+            */
             return $json;
         }
         return false;

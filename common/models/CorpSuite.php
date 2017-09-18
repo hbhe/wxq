@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\base\Exception;
 
 /**
  * This is the model class for table "{{%corp_suite}}".
@@ -24,6 +25,15 @@ class CorpSuite extends \common\wosotech\base\ActiveRecord
     public static function tableName()
     {
         return '{{%corp_suite}}';
+    }
+
+    /**
+     * @inheritdoc
+     * @return CorpSuiteQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new CorpSuiteQuery(get_called_class());
     }
 
     /**
@@ -57,19 +67,10 @@ class CorpSuite extends \common\wosotech\base\ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     * @return CorpSuiteQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new CorpSuiteQuery(get_called_class());
-    }
-
     public function getCorp()
     {
         return $this->hasOne(Corp::className(), ['corp_id' => 'corp_id']);
-    }    
+    }
 
     public function behaviors()
     {
@@ -77,27 +78,27 @@ class CorpSuite extends \common\wosotech\base\ActiveRecord
             [
                 'class' => \yii\behaviors\TimestampBehavior::className(),
                 'value' => new \yii\db\Expression('NOW()'),
-            ],            
+            ],
         ];
     }
 
     public function getSuite()
     {
         return $this->hasOne(Suite::className(), ['suite_id' => 'suite_id']);
-    }    
+    }
 
     public function getSuiteAccessToken()
     {
         $we = $this->suite->getQyWechat();
         $token = $we->getSuiteAccessToken($this->corp_id, $this->permanent_code);
-        
+
         return $token;
-    }    
+    }
 
     public function afterDelete()
     {
         $agents = $this->suite->agents;
-        foreach($agents as $agent) {
+        foreach ($agents as $agent) {
             if (null !== ($model = CorpAgent::findOne(['corp_id' => $this->corp_id, 'agent_id' => $agent->id]))) {
                 $model->delete();
             }
@@ -105,12 +106,155 @@ class CorpSuite extends \common\wosotech\base\ActiveRecord
         $this->trigger(self::EVENT_AFTER_DELETE);
     }
 
+    /**
+     * 从微信后台导入部门信息
+     *
+     */
+    public function importDepartment()
+    {
+        if (YII_ENV_DEV) {
+            $rows = [
+                'errcode' => 0,
+                'errmsg' => 'ok',
+                'department' => [
+                    [
+                        'id' => 1,
+                        'name' => '武汉xxxx',
+                        'parentid' => 0,
+                        'order' => 2147483447,
+                    ],
+                    [
+                        'id' => 2,
+                        'name' => '市场部',
+                        'parentid' => 1,
+                        'order' => 100000000,
+                    ],
+                    [
+                        'id' => 3,
+                        'name' => '技术部',
+                        'parentid' => 1,
+                        'order' => 99999000,
+                    ],
+                ],
+            ];
+        } else {
+            $we = $this->getQyWechat();
+            $rows = $we->getDepartment();
+        }
+        Department::deleteAll(['corp_id' => $this->corp_id]);
+        foreach ($rows['department'] as $row) {
+            $model = new Department();
+            $model->corp_id = $this->corp_id;
+            $model->name = $row['name'];
+            $model->id = implode('-', [$this->corp_id, $row['id']]);
+            $model->sort_order = $row['order'];
+            if ($row['parentid'] == 0) {
+                if (!$model->makeRoot()->save()) {
+                    Yii::error(['save db error', __METHOD__, __LINE__, $model->getErrors()]);
+                    throw new Exception('save db error');
+                }
+            } else {
+                $parent_id = implode('-', [$this->corp_id, $row['parentid']]);
+                $parent = Department::findOne(['id' => $parent_id]);
+                if (!$parent) {
+                    Yii::error(['no parent', __METHOD__, __LINE__]);
+                    throw new Exception('no parent');
+                }
+                if (!$model->appendTo($parent)->save()) {
+                    Yii::error(['save db error', __METHOD__, __LINE__, $model->getErrors()]);
+                    throw new Exception('save db error');
+                }
+            }
+        }
+    }
+
     public function getQyWechat()
     {
         $we = $this->suite->getQyWechat();
-        $token = $we->getSuiteAccessToken($this->corp_id, $this->permanent_code);  
-        $we->checkAuth('', '', $token);   
-        
+        $token = $we->getSuiteAccessToken($this->corp_id, $this->permanent_code);
+        $we->checkAuth('', '', $token);
+
         return $we;
-    }    
+    }
+
+    /**
+     * 从微信后台导入员工信息
+     *
+     */
+    public function importEmployee()
+    {
+        if (YII_ENV_DEV) {
+            $rows = [
+                'errcode' => 0,
+                'errmsg' => 'ok',
+                'userlist' => [
+                    [
+                        'userid' => 'maxcvw',
+                        'name' => 'caolei',
+                        'department' => [
+                            1, 2, 3
+                        ],
+                        'position' => '主管',
+                        'gender' => '1',
+                        'avatar' => 'http://p.qlogo.cn/bizmail/7KelGzSoy1RljgcMIiaomSVSKMzQlceq9gBicTVZ5yMvViblcGoOLdXIg/0',
+                        'status' => 1,
+                        'isleader' => 1,
+                        'english_name' => 'jack',
+                        'order' => [
+                            0, 1
+                        ],
+                    ],
+                    [
+                        'userid' => 'fire-v',
+                        'name' => 'xxx',
+                        'department' => [
+                            2,
+                        ],
+                        'position' => '后端开发',
+                        'gender' => '1',
+                        'avatar' => 'http://shp.qpic.cn/bizmp/YI2BzCzzDnbKoq9ryhWtxNM3JMrAMDCFM5DMtVDwQlaoH9NhCxibtvg/',
+                        'status' => 1,
+                        'isleader' => 0,
+                        'english_name' => 'tom',
+                        'order' => [
+                            10,
+                        ],
+                    ]
+                ],
+            ];
+        } else {
+            $we = $this->getQyWechat();
+            $rows = $we->getUserListInfo(1, 1); // 获取department_id = 1（即所有）员工
+        }
+        Employee::deleteAll(['corp_id' => $this->corp_id]);
+        DepartmentEmployee::deleteAll(['corp_id' => $this->corp_id]);
+        foreach ($rows['userlist'] as $row) {
+            $model = new Employee();
+            $model->setAttributes($row);
+            $model->corp_id = $this->corp_id;
+            if (!$model->save()) {
+                Yii::error(['save db error', __METHOD__, __LINE__, $model->getErrors()]);
+                throw new Exception('save db error');
+            }
+            $departments = $row['department'];
+            $orders = $row['order'];
+            foreach ($departments as $index => $id) {
+                $department_id = implode('-', [$this->corp_id, $id]);
+                $ar = DepartmentEmployee::findOne(['department_id' => $department_id, 'employee_id' => $model->id]);
+                if ($ar === null) {
+                    $ar = new DepartmentEmployee();
+                    $ar->corp_id = $this->corp_id;
+                    $ar->department_id = $department_id;
+                    $ar->employee_id = $model->id;
+                    $ar->sort_order = empty($orders[$index]) ? 0 : $orders[$index];
+                    if (!$ar->save()) {
+                        Yii::error(['save db error', __METHOD__, __LINE__, $ar->getErrors()]);
+                        throw new Exception('save db error');
+                    }
+                }
+            }
+
+        }
+
+    }
 }
