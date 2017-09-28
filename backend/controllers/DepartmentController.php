@@ -126,8 +126,7 @@ class DepartmentController extends Controller
     public function actionImport()
     {
         $model = CorpSuite::findOne(['corp_id' => 'wxe675e8d30802ff44', 'suite_id' => 'tj6fa3713d6ad487a1']);
-        $model->importDepartment();
-        $model->importEmployee();
+        $model->importDepartmentEmployee();
         return $this->redirect(['index']);
     }
 }

@@ -106,13 +106,33 @@ class CorpSuite extends \common\wosotech\base\ActiveRecord
         $this->trigger(self::EVENT_AFTER_DELETE);
     }
 
+    public function getQyWechat()
+    {
+        $we = $this->suite->getQyWechat();
+        $token = $we->getSuiteAccessToken($this->corp_id, $this->permanent_code);
+        $we->checkAuth('', '', $token);
+
+        return $we;
+    }
+
+
     /**
-     * 从微信后台导入部门信息
+     * 导入通讯录
+     *
+     */
+    public function importDepartmentEmployee()
+    {
+        $this->importDepartment();
+        $this->importEmployee();
+    }
+
+    /**
+     * 导入部门信息
      *
      */
     public function importDepartment()
     {
-        if (YII_ENV_DEV) {
+        if (0) {
             $rows = [
                 'errcode' => 0,
                 'errmsg' => 'ok',
@@ -168,22 +188,13 @@ class CorpSuite extends \common\wosotech\base\ActiveRecord
         }
     }
 
-    public function getQyWechat()
-    {
-        $we = $this->suite->getQyWechat();
-        $token = $we->getSuiteAccessToken($this->corp_id, $this->permanent_code);
-        $we->checkAuth('', '', $token);
-
-        return $we;
-    }
-
     /**
-     * 从微信后台导入员工信息
+     * 导入员工信息
      *
      */
     public function importEmployee()
     {
-        if (YII_ENV_DEV) {
+        if (0) {
             $rows = [
                 'errcode' => 0,
                 'errmsg' => 'ok',
@@ -226,6 +237,8 @@ class CorpSuite extends \common\wosotech\base\ActiveRecord
             $we = $this->getQyWechat();
             $rows = $we->getUserListInfo(1, 1); // 获取department_id = 1（即所有）员工
         }
+        Yii::error($rows);
+
         Employee::deleteAll(['corp_id' => $this->corp_id]);
         DepartmentEmployee::deleteAll(['corp_id' => $this->corp_id]);
         foreach ($rows['userlist'] as $row) {
