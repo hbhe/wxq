@@ -376,11 +376,11 @@ class AgentController extends Controller
         }
 
         // Save CorpAgent
-        $model = CorpAgent::findOne(['corp_id' => $corp_id, 'suite_id' => $suite->suite_id]);
+        $model = CorpAgent::findOne(['corp_id' => $corpid, 'suite_id' => $suite->suite_id]);
         if (null === $model) {
             $model = new CorpSuite();
         }
-        $model->corp_id = $corp_id;
+        $model->corp_id = $corpid;
         $model->suite_id = $suite->suite_id;
         $model->permanent_code = $arr['permanent_code'];
 

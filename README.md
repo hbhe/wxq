@@ -1,5 +1,4 @@
-微信企业号开发框架
-
+微信企业号第三方套件开发DEMO
 
 安装步骤:
 1. 先clone到本地后, 执行composer install
