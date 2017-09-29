@@ -82,7 +82,7 @@ class AgentController extends Controller
         $we = $model->getQyWechat();
         if (empty(\Yii::$app->request->get('code'))) {
             //snsapi_userinfo, snsapi_privateinfo
-            $url = $we->getOauthRedirect(Url::current(), 'STATE', 'snsapi_privateinfo', $agentid);
+            $url = $we->getOauthRedirect(Url::current([], true), 'STATE', 'snsapi_privateinfo', $agentid);
             Yii::error([__METHOD__, __LINE__, $url]);
             return $this->redirect($url);
             exit;
