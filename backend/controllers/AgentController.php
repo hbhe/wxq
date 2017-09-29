@@ -375,8 +375,9 @@ class AgentController extends Controller
             //$accessToken = $we->getAccessToken($auth_corpid, $permanentCode);
         }
 
-        // Save CorpAgent
-        $model = CorpAgent::findOne(['corp_id' => $corpid, 'suite_id' => $suite->suite_id]);
+/*
+        // Save CorpSuite
+        $model = CorpSuite::findOne(['corp_id' => $corpid, 'suite_id' => $suite->suite_id]);
         if (null === $model) {
             $model = new CorpSuite();
         }
@@ -389,6 +390,7 @@ class AgentController extends Controller
             Yii::error(['save CorpSuite err', __METHOD__, __LINE__, $model->toArray(), $model->getErrors()]);
             Yii::$app->end();
         }
+*/
 
         return 'success';
     }

@@ -107,7 +107,7 @@ class m161116_115156_create_init_tables extends Migration
             'corp_id' => $this->string(128)->notNull()->defaultValue(''),
             'agentid' =>  $this->integer()->notNull()->defaultValue(0),
             'agent_id' =>  $this->integer()->notNull()->defaultValue(0),
-            'agent_sid' => $this->string(64)->notNull()->defaultValue(''),
+            'agent_sid' => $this->string(128),
             'status' => $this->smallInteger()->notNull()->defaultValue(0),
             'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
             'updated_at' => $this->timestamp()->defaultValue(null),            
