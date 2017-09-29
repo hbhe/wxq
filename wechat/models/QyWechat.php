@@ -2107,12 +2107,17 @@ class QyWechat
 
     /**
      * oauth 授权跳转接口
+     * $scope: snsapi_base, snsapi_userinfo, snsapi_privateinfo
      * @param string $callback 回调URI
      * @param string $state 重定向后会带上state参数，企业可以填写a-zA-Z0-9的参数值
      * @return string
      */
-    public function getOauthRedirect($callback,$state='STATE',$scope='snsapi_base'){
-        return self::OAUTH_PREFIX.self::OAUTH_AUTHORIZE_URL.'appid='.$this->appid.'&redirect_uri='.urlencode($callback).'&response_type=code&scope='.$scope.'&state='.$state.'#wechat_redirect';
+    public function getOauthRedirect($callback, $state='STATE', $scope='snsapi_base', $agentid=''){
+        if (empty($agentid)) {
+            return self::OAUTH_PREFIX . self::OAUTH_AUTHORIZE_URL . 'appid=' . $this->appid . '&redirect_uri=' . urlencode($callback) . '&response_type=code&scope=' . $scope . '&state=' . $state . '#wechat_redirect';
+        } else {
+            return self::OAUTH_PREFIX . self::OAUTH_AUTHORIZE_URL . 'appid=' . $this->appid . '&redirect_uri=' . urlencode($callback) . '&response_type=code&scope=' . $scope . '&agentid=' . $agentid. '&state=' . $state . '#wechat_redirect';
+        }
     }
 
     // Suite Interface 
@@ -2419,7 +2424,28 @@ class QyWechat
         
         return $json;
     }
-    
+
+    public function getUserDetail($user_ticket){
+        if (!$this->access_token && !$this->checkAuth()) return false;
+        $data = ['user_ticket' => $user_ticket];
+        $result = $this->http_post(self::API_URL_PREFIX . "/user/getuserdetail?access_token={$this->access_token}", self::json_encode($data));
+        if (!$result) {
+            $this->log(print_r([__METHOD__, __LINE__, $result, $data], true));
+            return false;
+        }
+
+        $json = json_decode($result, true);
+        if ((!$json) || !empty($json['errcode'])) {
+            $this->errCode = $json['errcode'];
+            $this->errMsg = $json['errmsg'];
+            $this->log(print_r([__METHOD__, __LINE__, $json], true));
+            return false;
+        }
+
+        $this->log(print_r(['try getUserDetail ....', __METHOD__, __LINE__, $json], true));
+        return $json;
+    }
+
 }
 
 

@@ -272,7 +272,7 @@ class AgentController extends Controller
 
         $we->getRev();
         $data = $we->getRevData();
-        Yii::error(['data', __METHOD__, __LINE__, $data]);
+        Yii::error(['body', __METHOD__, __LINE__, $data]);
         if (isset($data['Event'])) {
             if ('subscribe' == $data['Event']) {
                 $model = CorpAgent::findOne(['corp_id' => $data['ToUserName'], 'agent_id' => $agent->id]);

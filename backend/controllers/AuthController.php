@@ -141,6 +141,15 @@ class AuthController extends Controller
 
 
         } else if ('change_auth' == $data['InfoType']) {
+            /*
+            [
+                'SuiteId' => 'tj6fa3713d6ad487a1',
+                'InfoType' => 'cancel_auth',
+                'TimeStamp' => '1506672838',
+                'AuthCorpId' => 'wxe675e8d30802ff44',
+                'AgentID' => '',
+            ],
+            */
             $authCorpId = $data['AuthCorpId'];
         } else if ('cancel_auth' == $data['InfoType']) {
             $authCorpId = $data['AuthCorpId'];

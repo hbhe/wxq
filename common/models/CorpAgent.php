@@ -77,12 +77,58 @@ class CorpAgent extends \common\wosotech\base\ActiveRecord
     public function getCorp()
     {
         return $this->hasOne(Corp::className(), ['corp_id' => 'corp_id']);
-    }    
+    }
 
     public function getAgent()
     {
         //return $this->hasOne(Agent::className(), ['id' => 'agent_id']);
         return $this->hasOne(Agent::className(), ['sid' => 'agent_sid']);
-    }    
-    
+    }
+
+    public function getSessionOpenidxxxx($dynamicOauthCallback = true, $scope = 'snsapi_base')
+    {
+        $wxapp = $this->getWxApp($scope, $dynamicOauthCallback)->getApplication();
+        $oauth = $wxapp->oauth;
+        if (empty(\Yii::$app->request->get('code'))) {
+            $oauth->redirect()->send();
+            exit;
+        }
+
+        $user = $oauth->user();
+        $token = $user->getToken()->toArray();
+        $info = $token;
+        /*
+        [
+            'access_token' => 'xxx',
+            'expires_in' => 7200,
+            'refresh_token' => 'yyy',
+            'openid' => 'oD8xWwg-GJiFi9RLEllEzR1bwJ9A',
+            'scope' => 'snsapi_userinfo',
+        ]
+        */
+
+        if ('snsapi_userinfo' == $token['scope']) {
+            $info = $originalUser = $user->getOriginal();
+            /*
+            [
+                'openid' => 'oD8xWwg-GJiFi9RLEllEzR1bwJ9A',
+                'nickname' => 'xx',
+                'sex' => 1,
+                'language' => 'zh_CN',
+                'city' => 'x',
+                'province' => 'xx',
+                'country' => 'xx',
+                'headimgurl' => 'http://wx.qlogo.cn/mmopen/Uf2Tkt1hetGliaFhJPGqIk23ZyE0Y7AFCmefYQAbic2yNRdjO0ZsepFlWA2CHUcewXsqdGIQ0q5nvCIxVJmkAUFzORhqraI5Mp/0',
+                'privilege' => [],
+            ]
+            */
+
+        }
+
+        //\Yii::$app->session['openid'] = $info;
+        // $wxUser = $this->getWxUser($openid); // ???
+        //Yii::error(['openid info', $info]);
+        return $info;
+    }
+
 }

@@ -3,8 +3,10 @@ namespace frontend\controllers;
 
 use common\models\Agent;
 use common\models\Corp;
+use common\models\CorpSuite;
 use Yii;
 use yii\base\Exception;
+use yii\helpers\Url;
 use yii\web\Controller;
 
 /**
@@ -27,6 +29,7 @@ class AgentController extends Controller
     /**
      * 微信用户，在点击应用(Agent)时进入到主页(即Agent前台)
      * http://wxq-frontend.buy027.com/index.php?r=agent/frontend&agent_sid=ezoa-agent&corpid=$CORPID$&agentid=$AGENTID$
+     * http://127.0.0.1/wxq/frontend/web/index.php?r=agent/frontend&agent_sid=ezoa-agent&corpid=$CORPID$&agentid=$AGENTID$
      * @return string
      */
     public function actionFrontend()
@@ -51,6 +54,11 @@ class AgentController extends Controller
             throw new Exception('no agent_id parameter');
         }
 
+        if (empty($agentid = Yii::$app->request->get('agentid'))) {
+            Yii::error(['no agentid parameter', __METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
+            throw new Exception('no agentid parameter');
+        }
+
         $corp = Corp::findOne(['corp_id' => $corpid]);
         if ($corp === null) {
             Yii::error(['no corp', __METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
@@ -69,7 +77,23 @@ class AgentController extends Controller
             throw new Exception('no suite');
         }
 
-        return $this->render('index');
+        // get mobile
+        $model = CorpSuite::findOne(['corp_id' => $corpid, 'suite_id' => $suite->suite_id]);
+        $we = $model->getQyWechat();
+        if (empty(\Yii::$app->request->get('code'))) {
+            //snsapi_userinfo, snsapi_privateinfo
+            $url = $we->getOauthRedirect(Url::current(), 'STATE', 'snsapi_privateinfo', $agentid);
+            Yii::error([__METHOD__, __LINE__, $url]);
+            return $this->redirect($url);
+            exit;
+        }
+
+        $userInfo = $we->getUserId(Yii::$app->request->get('code'));
+        Yii::error($userInfo);
+
+        return 'abc';
+        //$we->getUserDetail($user_ticket);
+        //return $this->render('index');
     }
 
 }
