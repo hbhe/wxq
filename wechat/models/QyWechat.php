@@ -73,7 +73,7 @@ class QyWechat
 
     private $token;
     private $encodingAesKey;
-    public $appid;         //也就是企业号的CorpID
+    private $appid;         //也就是企业号的CorpID
     private $appsecret;
     private $access_token;
     private $agentid;       //应用id   AgentID
@@ -2120,7 +2120,7 @@ class QyWechat
         }
     }
 
-    // Suite Interface 
+    // Suite Interface
     private $suit_access_token;
     private $suite_ticket;
 
@@ -2280,6 +2280,23 @@ class QyWechat
 
     )
     */
+
+    /**
+     * @return string
+     */
+    public function getAppid()
+    {
+        return $this->appid;
+    }
+
+    /**
+     * @param string $appid
+     */
+    public function setAppid($appid)
+    {
+        $this->appid = $appid;
+    }
+
     public function getPermanentCode($auth_code)
     {
         $suite_access_token = $this->getSuiteToken();

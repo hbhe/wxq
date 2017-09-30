@@ -81,9 +81,9 @@ class AgentController extends Controller
         $model = CorpSuite::findOne(['corp_id' => $corpid, 'suite_id' => $suite->suite_id]);
         $we = $model->getQyWechat();
         if (empty(\Yii::$app->request->get('code'))) {
-            $we->appid = $corpid;
             //snsapi_userinfo, snsapi_privateinfo
-            $url = $we->getOauthRedirect(Url::current([], true), 'STATE', 'snsapi_privateinfo', $agentid);
+            $we->setAppid($corpid);
+            $url = $we->getOauthRedirect($corpid, Url::current([], true), 'STATE', 'snsapi_privateinfo', $agentid);
             //$url = $we->getOauthRedirect(Url::current([], true), 'STATE', 'snsapi_userinfo', $agentid);
             Yii::error([__METHOD__, __LINE__, $url]);
             //https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe675e8d30802ff44&redirect_uri=http%3A%2F%2Fwxq-frontend.buy028.com%2Findex.php%3Fr%3Dagent%252Ffrontend%26agent_sid%3Dezoa-agent%26corpid%3Dwxe675e8d30802ff44%26agentid%3D1000010&response_type=code&scope=snsapi_userinfo&agentid=1000010&state=STATE#wechat_redirect
@@ -116,6 +116,7 @@ class AgentController extends Controller
         $userDetail = $we->getUserDetail($userInfo['user_ticket']);
         Yii::error($userDetail);
         /*
+        // for snsapi_userinfo
         [
             'errcode' => 0,
             'errmsg' => '',
@@ -131,6 +132,29 @@ class AgentController extends Controller
             'extattr' => [
                 'attrs' => [],
             ],
+            'order' => [],
+            'wxplugin_status' => 1,
+        ]
+
+        // for snsapi_privateinfo
+        [
+            'errcode' => 0,
+            'errmsg' => '',
+            'userid' => 'hhb',
+            'name' => 'xx',
+            'department' => [
+                3,
+            ],
+            'position' => '',
+            'mobile' => '15527210477',
+            'gender' => '1',
+            'email' => '',
+            'avatar' => 'http://shp.qpic.cn/bizmp/YI2BzCzzDnauvibjpooLXHaLph9g9D2tcmgEHiaiaIMnqNVib4H4Tn7pKw/',
+            'status' => 1,
+            'extattr' => [
+                'attrs' => [],
+            ],
+            'telephone' => '',
             'order' => [],
             'wxplugin_status' => 1,
         ]
