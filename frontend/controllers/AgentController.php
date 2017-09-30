@@ -83,11 +83,11 @@ class AgentController extends Controller
         if (empty(\Yii::$app->request->get('code'))) {
             $we->appid = $corpid;
             //snsapi_userinfo, snsapi_privateinfo
-            //$url = $we->getOauthRedirect(Url::current([], true), 'STATE', 'snsapi_privateinfo', $agentid);
-            $url = $we->getOauthRedirect(Url::current([], true), 'STATE', 'snsapi_userinfo', $agentid);
+            $url = $we->getOauthRedirect(Url::current([], true), 'STATE', 'snsapi_privateinfo', $agentid);
+            //$url = $we->getOauthRedirect(Url::current([], true), 'STATE', 'snsapi_userinfo', $agentid);
             Yii::error([__METHOD__, __LINE__, $url]);
+            //https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe675e8d30802ff44&redirect_uri=http%3A%2F%2Fwxq-frontend.buy028.com%2Findex.php%3Fr%3Dagent%252Ffrontend%26agent_sid%3Dezoa-agent%26corpid%3Dwxe675e8d30802ff44%26agentid%3D1000010&response_type=code&scope=snsapi_userinfo&agentid=1000010&state=STATE#wechat_redirect
             return $this->redirect($url);
-            exit;
         }
 
         /*
@@ -115,6 +115,26 @@ class AgentController extends Controller
         */
         $userDetail = $we->getUserDetail($userInfo['user_ticket']);
         Yii::error($userDetail);
+        /*
+        [
+            'errcode' => 0,
+            'errmsg' => '',
+            'userid' => 'hhb',
+            'name' => 'xxx',
+            'department' => [
+                3,
+            ],
+            'position' => '',
+            'gender' => '1',
+            'avatar' => 'http://shp.qpic.cn/bizmp/YI2BzCzzDnauvibjpooLXHaLph9g9D2tcmgEHiaiaIMnqNVib4H4Tn7pKw/',
+            'status' => 1,
+            'extattr' => [
+                'attrs' => [],
+            ],
+            'order' => [],
+            'wxplugin_status' => 1,
+        ]
+        */
         return 'abc';
 
         //return $this->render('index');
