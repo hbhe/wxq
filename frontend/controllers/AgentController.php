@@ -81,6 +81,7 @@ class AgentController extends Controller
         $model = CorpSuite::findOne(['corp_id' => $corpid, 'suite_id' => $suite->suite_id]);
         $we = $model->getQyWechat();
         if (empty(\Yii::$app->request->get('code'))) {
+            $we->appid = $corpid;
             //snsapi_userinfo, snsapi_privateinfo
             $url = $we->getOauthRedirect(Url::current([], true), 'STATE', 'snsapi_privateinfo', $agentid);
             Yii::error([__METHOD__, __LINE__, $url]);
