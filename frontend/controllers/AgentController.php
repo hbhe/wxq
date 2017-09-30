@@ -83,15 +83,36 @@ class AgentController extends Controller
         if (empty(\Yii::$app->request->get('code'))) {
             $we->appid = $corpid;
             //snsapi_userinfo, snsapi_privateinfo
-            $url = $we->getOauthRedirect(Url::current([], true), 'STATE', 'snsapi_privateinfo', $agentid);
+            //$url = $we->getOauthRedirect(Url::current([], true), 'STATE', 'snsapi_privateinfo', $agentid);
+            $url = $we->getOauthRedirect(Url::current([], true), 'STATE', 'snsapi_userinfo', $agentid);
             Yii::error([__METHOD__, __LINE__, $url]);
             return $this->redirect($url);
             exit;
         }
 
+        /*
+        [
+            'r' => 'agent/frontend'
+            'agent_sid' => 'ezoa-agent'
+            'corpid' => 'wxe675e8d30802ff44'
+            'agentid' => '1000010'
+            'code' => 'Q6Hqf5rndg-RUFmgADbqQ1Q0pbZ13xNvoeYb-v1r-ss'
+            'state' => 'STATE'
+        ]
+        */
         $userInfo = $we->getUserId(Yii::$app->request->get('code'));
         Yii::error($userInfo);
-
+        /*
+        //snsapi_privateinfo
+        [
+            'UserId' => 'hhb',
+            'DeviceId' => '865124037633551',
+            'errcode' => 0,
+            'errmsg' => 'ok',
+            'user_ticket' => 'DSEP1EgkUaReR0G7KHzv0_7dsHd_rvU7t3OijHn-smu7UKvFRj-aIlPpQoxqiyD4Dix6MkLPPAKcT4v6aRbgCuOChdOVvib9MDH6pBT-EsY',
+            'expires_in' => 1800,
+        ]
+        */
         return 'abc';
         //$we->getUserDetail($user_ticket);
         //return $this->render('index');
