@@ -73,7 +73,7 @@ class QyWechat
 
     private $token;
     private $encodingAesKey;
-    private $appid;         //也就是企业号的CorpID
+    public $appid;         //也就是企业号的CorpID
     private $appsecret;
     private $access_token;
     private $agentid;       //应用id   AgentID
