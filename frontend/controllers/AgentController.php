@@ -82,10 +82,10 @@ class AgentController extends Controller
         $we = $model->getQyWechat();
         if (empty(\Yii::$app->request->get('code'))) {
             //snsapi_userinfo, snsapi_privateinfo
+            // 构造链接时appid使用使用者企业的corpid
             $we->setAppid($corpid);
             $url = $we->getOauthRedirect(Url::current([], true), 'STATE', 'snsapi_privateinfo', $agentid);
-            //$url = $we->getOauthRedirect(Url::current([], true), 'STATE', 'snsapi_userinfo', $agentid);
-            Yii::error([__METHOD__, __LINE__, $url]);
+            //Yii::error([__METHOD__, __LINE__, $url]);
             //https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe675e8d30802ff44&redirect_uri=http%3A%2F%2Fwxq-frontend.buy028.com%2Findex.php%3Fr%3Dagent%252Ffrontend%26agent_sid%3Dezoa-agent%26corpid%3Dwxe675e8d30802ff44%26agentid%3D1000010&response_type=code&scope=snsapi_userinfo&agentid=1000010&state=STATE#wechat_redirect
             return $this->redirect($url);
         }
@@ -101,8 +101,8 @@ class AgentController extends Controller
         ]
         */
         $userInfo = $we->getUserId(Yii::$app->request->get('code'));
-        Yii::error($userInfo);
         /*
+        Yii::error($userInfo);
         //snsapi_privateinfo
         [
             'UserId' => 'hhb',
@@ -113,9 +113,10 @@ class AgentController extends Controller
             'expires_in' => 1800,
         ]
         */
+
         $userDetail = $we->getUserDetail($userInfo['user_ticket']);
-        Yii::error($userDetail);
         /*
+        Yii::error($userDetail);
         // for snsapi_userinfo
         [
             'errcode' => 0,
@@ -159,9 +160,17 @@ class AgentController extends Controller
             'wxplugin_status' => 1,
         ]
         */
-        return 'abc';
-
-        //return $this->render('index');
+        return $this->redirect([$agent_sid]);
     }
 
-}
+    // for agent_sid = demo-agent
+    public function actionDemoAgent()
+    {
+        return $this->route;
+    }
+
+    // for agent_sid = ezoa-agent
+    public function actionEzoaAgent()
+    {
+        return $this->route;
+    }
