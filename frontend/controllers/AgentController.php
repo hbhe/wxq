@@ -83,7 +83,7 @@ class AgentController extends Controller
         if (empty(\Yii::$app->request->get('code'))) {
             //snsapi_userinfo, snsapi_privateinfo
             $we->setAppid($corpid);
-            $url = $we->getOauthRedirect($corpid, Url::current([], true), 'STATE', 'snsapi_privateinfo', $agentid);
+            $url = $we->getOauthRedirect(Url::current([], true), 'STATE', 'snsapi_privateinfo', $agentid);
             //$url = $we->getOauthRedirect(Url::current([], true), 'STATE', 'snsapi_userinfo', $agentid);
             Yii::error([__METHOD__, __LINE__, $url]);
             //https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe675e8d30802ff44&redirect_uri=http%3A%2F%2Fwxq-frontend.buy028.com%2Findex.php%3Fr%3Dagent%252Ffrontend%26agent_sid%3Dezoa-agent%26corpid%3Dwxe675e8d30802ff44%26agentid%3D1000010&response_type=code&scope=snsapi_userinfo&agentid=1000010&state=STATE#wechat_redirect
