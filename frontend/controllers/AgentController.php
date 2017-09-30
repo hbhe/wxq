@@ -113,8 +113,10 @@ class AgentController extends Controller
             'expires_in' => 1800,
         ]
         */
+        $userDetail = $we->getUserDetail($userInfo['user_ticket']);
+        Yii::error($userDetail);
         return 'abc';
-        //$we->getUserDetail($user_ticket);
+
         //return $this->render('index');
     }
 
