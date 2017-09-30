@@ -174,3 +174,4 @@ class AgentController extends Controller
     {
         return $this->route;
     }
+}
