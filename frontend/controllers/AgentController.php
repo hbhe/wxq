@@ -4,6 +4,7 @@ namespace frontend\controllers;
 use common\models\Agent;
 use common\models\Corp;
 use common\models\CorpSuite;
+use common\models\Employee;
 use Yii;
 use yii\base\Exception;
 use yii\helpers\Url;
@@ -160,6 +161,7 @@ class AgentController extends Controller
             'wxplugin_status' => 1,
         ]
         */
+        Employee::findOne([])
         return $this->redirect([$agent_sid]);
     }
 
