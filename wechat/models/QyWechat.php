@@ -2311,7 +2311,11 @@ class QyWechat
         if ((!$json) || !empty($json['errcode'])) {
             $this->errCode = $json['errcode'];
             $this->errMsg = $json['errmsg'];
-            $this->log(print_r([__METHOD__, __LINE__, $json], true));                            
+            $this->log(print_r([__METHOD__, __LINE__, $json], true));
+            if ($this->errCode == '40078') {
+                $key = 'QyWechat::getPreAuthCode' . $this->appid;
+                $this->removeCache($key);
+            }
             return false;
         }
         
