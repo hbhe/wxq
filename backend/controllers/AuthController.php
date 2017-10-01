@@ -139,6 +139,7 @@ class AuthController extends Controller
             }
 
             // CorpAgent何时创建? 其实可以现在就创建军
+            Yii::error($agents);
             foreach ($agents as $agent) {
                 $model = CorpAgent::findOne(['corp_id' => $corp_id, 'agentid' => $agent['agentid']]);
                 if (null === $model) {
