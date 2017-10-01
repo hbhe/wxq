@@ -164,7 +164,7 @@ class AuthController extends Controller
             Yii::error('1111111111111111');
 
             // test
-            $accessToken = $model->getSuiteAccessToken();
+            //$accessToken = $model->getSuiteAccessToken();
 
 
         } else if ('change_auth' == $data['InfoType']) {
