@@ -275,7 +275,10 @@ class AgentController extends Controller
         $data = $we->getRevData();
         Yii::error(['body', __METHOD__, __LINE__, $data]);
         if (isset($data['Event'])) {
-            // 首次安装组件应用
+            // 员工关注时触发
+            // 但似乎在安装组件时, 系统会模拟一次所有员工向服务器发subscribe事件, why?
+
+            /*
             if ('subscribe' == $data['Event']) {
                 $model = CorpAgent::findOne(['corp_id' => $data['ToUserName'], 'agent_id' => $agent->id]);
                 if (null === $model) {
@@ -298,8 +301,9 @@ class AgentController extends Controller
                     }
                 }
             }
+            */
 
-            // 每次进入消息对话框时,
+            // 每次进入消息对话框时(从微信插件中进入时也收到?)
             // 只有当agent给用户发一条消息后，用户才能在手机上看到这个agent的消息对话框? 用户如果看不到对话框如何给agent发信息呢?
             if ('enter_agent' == $data['Event']) {
             }

@@ -97,6 +97,7 @@ class CorpSuite extends \common\wosotech\base\ActiveRecord
 
     public function afterDelete()
     {
+        // 用户删除其订购的suite时, 当然也会同时清除的订购的Agent
         $agents = $this->suite->agents;
         foreach ($agents as $agent) {
             if (null !== ($model = CorpAgent::findOne(['corp_id' => $this->corp_id, 'agent_id' => $agent->id]))) {

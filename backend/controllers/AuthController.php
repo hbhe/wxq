@@ -2,6 +2,7 @@
 namespace backend\controllers;
 
 use common\models\Corp;
+use common\models\CorpAgent;
 use common\models\CorpSuite;
 use common\models\Suite;
 use Yii;
@@ -103,12 +104,96 @@ class AuthController extends Controller
                 Yii::error([__METHOD__, __LINE__, $suite->getErrors()]);
             }
         } else if ('create_auth' == $data['InfoType']) {
-            // 安装套件
+            // 客户安装套件时
             $arr = $we->getPermanentCode($data['AuthCode']);
+            /*
+            Array
+            (
+                [access_token] => O4bVYPnH5H9-AY39rAeVvxnYznk2OpvpSXx6s8r49DlQOTrKGg0rQkNQecBEnjinhBfqByeliZxiNj_LOzqpGdqZPg0A7pmH2A8319qvynRjm5UrPzMOOBxzQWJmnoPZbSVNsO6fu38oZbU-_pqvABKy61WTXuhJdJ2m74WPoAAgw4yCSs1OhKJbt0X8Ex5iZ8kTd5Py_nTchcTRVF2ytA
+                [expires_in] => 7200
+                [permanent_code] => oW6QXgM8wRVrRemDHF5hECKcaj5JvYxXgM6JyJYygEU
+                [auth_corp_info] => Array
+                    (
+                        [corpid] => wxe675e8d30802ff44
+                        [corp_name] => companyname
+                        [corp_type] => unverified
+                        [corp_round_logo_url] => http://mmbiz.qpic.cn/mmbiz_png/xxx/0
+                        [corp_square_logo_url] => http://p.qlogo.cn/bizmail/xxx/0
+                        [corp_user_max] => 200
+                        [corp_agent_max] => 0
+                        [corp_wxqrcode] => http://shp.qpic.cn/bizmpxxxQ/
+                        [corp_full_name] => full_company_name
+                        [subject_type] => 1
+                        [verified_end_time] => 0
+                    )
+
+                [auth_info] => Array
+                    (
+                        [agent] => Array
+                            (
+                                [0] => Array
+                                    (
+                                        [agentid] => 1000011
+                                        [name] => 物料登记
+                                        [square_logo_url] => https://p.qpic.cn/pic_wework/443159806/7670b07e9578252bf95a7a2aa0d08d3126a39a73c93314be/0
+                                        [appid] => 1
+                                        [api_group] => Array
+                                            (
+                                            )
+
+                                        [privilege] => Array
+                                            (
+                                                [level] => 1
+                                                [allow_party] => Array
+                                                    (
+                                                        [0] => 1
+                                                    )
+
+                                                [allow_user] => Array
+                                                    (
+                                                    )
+
+                                                [allow_tag] => Array
+                                                    (
+                                                    )
+
+                                                [extra_party] => Array
+                                                    (
+                                                    )
+
+                                                [extra_tag] => Array
+                                                    (
+                                                    )
+
+                                            )
+
+                                    )
+
+                            )
+
+                        [department] => Array
+                            (
+                            )
+
+                    )
+
+                [auth_user_info] => Array
+                    (
+                        [userid] => hhb
+                        [name] => xxx
+                        [mobile] => 15527210477
+                        [email] =>
+                        [avatar] => http://shp.qpic.cn/bizmp/YI2BzCzzDnauvibjpooLXHaLph9g9D2tcmgEHiaiaIMnqNVib4H4Tn7pKw/
+                    )
+            )
+            */
+
             $auth_corp_info = $arr['auth_corp_info'];
             $corp_id = $auth_corp_info['corpid'];
+            $auth_info = $arr['auth_info'];
+            $agents = $auth_info['agent'];
 
-            // Save Corp
+            // 安装客户信息
             $model = Corp::findOne(['corp_id' => $corp_id]);
             if (null === $model) {
                 $model = new Corp();
@@ -120,7 +205,7 @@ class AuthController extends Controller
                 Yii::$app->end();
             }
 
-            // Save CorpSuite
+            // 安装用户订购的suite
             $model = CorpSuite::findOne(['corp_id' => $corp_id, 'suite_id' => $suite->suite_id]);
             if (null === $model) {
                 $model = new CorpSuite();
@@ -133,6 +218,23 @@ class AuthController extends Controller
             if (!$model->save(false)) {
                 Yii::error(['save CorpSuite err', __METHOD__, __LINE__, $model->toArray(), $model->getErrors()]);
                 Yii::$app->end();
+            }
+
+            // CorpAgent何时创建?
+            // 在订购组件时创建, 不过此时还没有agent_sid, 在进入agent时在把agent_sid信息补充完整?
+            foreach ($agents as $agent) {
+                $model = CorpAgent::findOne(['corp_id' => $corp_id, 'agentid' => $agent['agentid']]);
+                if (null === $model) {
+                    $model = new CorpAgent();
+                }
+                $model->corp_id = $corp_id;
+                $model->agentid = $agent['agentid'];
+
+                $model->setAttributes($agent);
+                if (!$model->save(false)) {
+                    Yii::error(['save CorpSuite err', __METHOD__, __LINE__, $model->toArray(), $model->getErrors()]);
+                    Yii::$app->end();
+                }
             }
 
             // test
@@ -151,7 +253,7 @@ class AuthController extends Controller
             */
             $authCorpId = $data['AuthCorpId'];
         } else if ('cancel_auth' == $data['InfoType']) {
-            // 用户删除套件
+            // 用户删除订购的套件
             $authCorpId = $data['AuthCorpId'];
             $SuiteId = $data['SuiteId'];
             $model = CorpSuite::findOne(['corp_id' => $authCorpId, 'suite_id' => $SuiteId]);

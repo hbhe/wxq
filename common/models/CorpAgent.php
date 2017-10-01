@@ -45,7 +45,7 @@ class CorpAgent extends \common\wosotech\base\ActiveRecord
         return [
             'id' => 'ID',
             'corp_id' => 'Corp ID',
-            'agentid' => 'AgentID',        // 使用方应用实例ID, 每安装一个应用, 企业号就为它分配一个id, 从1开始, 没什么球用
+            'agentid' => 'AgentID',        // 客户应用实例ID, 每安装一次应用, 企业号就为它分配一个id, 如1000010, 1000011, 用处?
             'agent_id' => 'Agent ID',       // 表明此应用属于哪个Agent应用, Agent表的主健, 不同的企业安装同一个应用时, agent_id相等,而agentid不等
             'agent_sid' => 'Agent SID',       // 字符串ID, 用来表示是哪个agent, 尽量用这个! 不用agent_id
             'status' => 'Status',
