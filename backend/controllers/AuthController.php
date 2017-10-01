@@ -2,6 +2,7 @@
 namespace backend\controllers;
 
 use common\models\Corp;
+use common\models\CorpAgent;
 use common\models\CorpSuite;
 use common\models\Suite;
 use Yii;
@@ -107,6 +108,8 @@ class AuthController extends Controller
             $arr = $we->getPermanentCode($data['AuthCode']);
             $auth_corp_info = $arr['auth_corp_info'];
             $corp_id = $auth_corp_info['corpid'];
+            $auth_info = $arr['auth_info'];
+            $agents = $auth_info['agent'];
 
             // Save Corp
             $model = Corp::findOne(['corp_id' => $corp_id]);
