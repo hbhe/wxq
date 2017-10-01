@@ -1,19 +1,11 @@
 <?php
 namespace backend\controllers;
 
-use Yii;
-use yii\base\Exception;
-use yii\helpers\ArrayHelper;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use common\models\LoginForm;
-
 use common\models\Corp;
-use common\models\Suite;
-use common\models\Agent;
 use common\models\CorpSuite;
-use common\models\CorpAgent;
+use common\models\Suite;
+use Yii;
+use yii\web\Controller;
 
 /**
  * Site controller
@@ -33,7 +25,7 @@ class AuthController extends Controller
      * @param $suite_sid
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex($suite_sid)
     {
         /*
         [
@@ -58,26 +50,10 @@ class AuthController extends Controller
         */
         Yii::error([$_GET, $_POST, file_get_contents("php://input")]);
 
-        $suite_sid = Yii::$app->request->get('suite_sid');
-        if (!$suite_sid) {
-            // 如果未传suite_sid参数, 直接返回echostr(简洁式接入)
-            if ($echoStr = Yii::$app->request->get('echostr')) {
-                die($echoStr);
-            }
-            $postStr = file_get_contents("php://input");
-            $row = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
-            if (empty($suite_id = ArrayHelper::getValue($row, 'ToUserName'))) {
-                Yii::error(['no ToUserName!', __METHOD__, __LINE__]);
-                return 'fatal';
-            }
-            $suite = Suite::findOne(['suite_id' => $suite_id]);
-        } else {
-            $suite = Suite::findOne(['sid' => $suite_sid]);
-        }
-
+        $suite = Suite::findOne(['sid' => $suite_sid]);
         if (null === $suite) {
-            Yii::error(['the suite does not exists in db!', $_GET, $_POST, file_get_contents("php://input")]);
-            return 'error';
+            Yii::error([$_GET, $_POST, file_get_contents("php://input")]);
+            return 'err';
         }
         $we = $suite->getQyWechat();
         if (!$we->valid()) {
@@ -193,7 +169,6 @@ class AuthController extends Controller
 
         return 'success';
     }
-
 
 
 }
