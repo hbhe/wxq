@@ -147,6 +147,7 @@ class AuthController extends Controller
             Yii::error($agents);
 
             foreach ($agents as $agent) {
+                Yii::error('000000000');
                 $model = CorpAgent::findOne(['corp_id' => $corp_id, 'agentid' => $agent['agentid']]);
                 if (null === $model) {
                     $model = new CorpAgent();
