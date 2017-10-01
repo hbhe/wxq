@@ -106,7 +106,7 @@ class AuthController extends Controller
         } else if ('create_auth' == $data['InfoType']) {
             // 安装套件
             $arr = $we->getPermanentCode($data['AuthCode']);
-            if (false === false) {
+            if (false === $arr) {
                 Yii::error(['getPermanentCode error', __METHOD__, __LINE__]);
                 Yii::$app->end();
             }
