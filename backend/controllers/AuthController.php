@@ -110,7 +110,7 @@ class AuthController extends Controller
                 Yii::error(['getPermanentCode error', __METHOD__, __LINE__]);
                 Yii::$app->end();
             }
-            
+
             $auth_corp_info = $arr['auth_corp_info'];
             $corp_id = $auth_corp_info['corpid'];
             $auth_info = $arr['auth_info'];
@@ -145,7 +145,7 @@ class AuthController extends Controller
 
             // CorpAgent何时创建? 其实可以现在就创建军
             Yii::error($agents);
-            /* 放开就报错???
+
             foreach ($agents as $agent) {
                 $model = CorpAgent::findOne(['corp_id' => $corp_id, 'agentid' => $agent['agentid']]);
                 if (null === $model) {
@@ -160,7 +160,7 @@ class AuthController extends Controller
                     Yii::$app->end();
                 }
             }
-            */
+            Yii::error('1111111111111');
 
             // test
             $accessToken = $model->getSuiteAccessToken();
