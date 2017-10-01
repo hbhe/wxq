@@ -110,6 +110,7 @@ class AuthController extends Controller
                 Yii::error(['getPermanentCode error', __METHOD__, __LINE__]);
                 Yii::$app->end();
             }
+            
             $auth_corp_info = $arr['auth_corp_info'];
             $corp_id = $auth_corp_info['corpid'];
             $auth_info = $arr['auth_info'];
