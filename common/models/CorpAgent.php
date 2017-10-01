@@ -45,9 +45,9 @@ class CorpAgent extends \common\wosotech\base\ActiveRecord
         return [
             'id' => 'ID',
             'corp_id' => 'Corp ID',
-            'agentid' => 'AgentID',        // 使用方应用实例ID, 每安装一个应用, 企业号就为它分配一个id, 从1开始
-            'agent_id' => 'Agent ID',       // 表明此应用属于哪个Agent应用, 不同的企业安装同一个应用时, agent_id相等,而agentid不等
-            'agent_sid' => 'Agent SID',       // 字符串ID, 尽量用这个吧
+            'agentid' => 'AgentID',        // 使用方应用实例ID, 每安装一个应用, 企业号就为它分配一个id, 从1开始, 没什么球用
+            'agent_id' => 'Agent ID',       // 表明此应用属于哪个Agent应用, Agent表的主健, 不同的企业安装同一个应用时, agent_id相等,而agentid不等
+            'agent_sid' => 'Agent SID',       // 字符串ID, 用来表示是哪个agent, 尽量用这个! 不用agent_id
             'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -83,52 +83,6 @@ class CorpAgent extends \common\wosotech\base\ActiveRecord
     {
         //return $this->hasOne(Agent::className(), ['id' => 'agent_id']);
         return $this->hasOne(Agent::className(), ['sid' => 'agent_sid']);
-    }
-
-    public function getSessionOpenidxxxx($dynamicOauthCallback = true, $scope = 'snsapi_base')
-    {
-        $wxapp = $this->getWxApp($scope, $dynamicOauthCallback)->getApplication();
-        $oauth = $wxapp->oauth;
-        if (empty(\Yii::$app->request->get('code'))) {
-            $oauth->redirect()->send();
-            exit;
-        }
-
-        $user = $oauth->user();
-        $token = $user->getToken()->toArray();
-        $info = $token;
-        /*
-        [
-            'access_token' => 'xxx',
-            'expires_in' => 7200,
-            'refresh_token' => 'yyy',
-            'openid' => 'oD8xWwg-GJiFi9RLEllEzR1bwJ9A',
-            'scope' => 'snsapi_userinfo',
-        ]
-        */
-
-        if ('snsapi_userinfo' == $token['scope']) {
-            $info = $originalUser = $user->getOriginal();
-            /*
-            [
-                'openid' => 'oD8xWwg-GJiFi9RLEllEzR1bwJ9A',
-                'nickname' => 'xx',
-                'sex' => 1,
-                'language' => 'zh_CN',
-                'city' => 'x',
-                'province' => 'xx',
-                'country' => 'xx',
-                'headimgurl' => 'http://wx.qlogo.cn/mmopen/Uf2Tkt1hetGliaFhJPGqIk23ZyE0Y7AFCmefYQAbic2yNRdjO0ZsepFlWA2CHUcewXsqdGIQ0q5nvCIxVJmkAUFzORhqraI5Mp/0',
-                'privilege' => [],
-            ]
-            */
-
-        }
-
-        //\Yii::$app->session['openid'] = $info;
-        // $wxUser = $this->getWxUser($openid); // ???
-        //Yii::error(['openid info', $info]);
-        return $info;
     }
 
 }

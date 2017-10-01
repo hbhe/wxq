@@ -139,7 +139,7 @@ class AgentController extends Controller
         /*
         [
             'r' => 'agent/callback',
-            'agent_sid' => 'ezoa-agent',
+            'agent_sid' => 'agent-ezoa',
             'corpid' => 'wx0b4f26d460868a25',
             'msg_signature' => '1bca8057e4f3f9ec1c39741e936f3f69a5726d85',
             'timestamp' => '1504680998',
@@ -148,7 +148,7 @@ class AgentController extends Controller
         ],
         [
             'r' => 'auth/callback'
-            'agent_sid' => 'ezoa-agent'
+            'agent_sid' => 'agent-ezoa'
             'corpid' => 'wxe675e8d30802ff44'
             'msg_signature' => 'f0bd5d86632292174fcae6fbcacca97b313e19e0'
             'timestamp' => '1504665259'
@@ -234,12 +234,13 @@ class AgentController extends Controller
         Yii::error([__METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
 
         if (empty($agent_sid = Yii::$app->request->get('agent_sid'))) {
-            Yii::error(['no agent_id parameter', __METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
+            Yii::error(['no agent_sid parameter', __METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
             Yii::$app->end();
         }
 
         // 如果无echostr, 表明url参数corpid是使用者的企业corpid, 否则是服务商的corpid, 什么逻辑！
         if (!Yii::$app->request->get('echostr')) {
+            // 如果不是echostr, 就校验一下corpid的存在
             if (empty($corpid = Yii::$app->request->get('corpid'))) {
                 Yii::error(['no corpid parameter', __METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
                 Yii::$app->end();
@@ -274,12 +275,14 @@ class AgentController extends Controller
         $data = $we->getRevData();
         Yii::error(['body', __METHOD__, __LINE__, $data]);
         if (isset($data['Event'])) {
+            // 首次安装组件应用
             if ('subscribe' == $data['Event']) {
                 $model = CorpAgent::findOne(['corp_id' => $data['ToUserName'], 'agent_id' => $agent->id]);
                 if (null === $model) {
                     $model = new CorpAgent();
                     $model->corp_id = $data['ToUserName'];
                     $model->agent_id = $agent->id;
+                    $model->agent_sid = $agent->sid;
                     if (!$model->save()) {
                         Yii::error(['save CorpAgent err', __METHOD__, __LINE__, $model->getErrors()]);
                     } else Yii::error('save CorpAgent ok' . $agent->id);
@@ -296,7 +299,8 @@ class AgentController extends Controller
                 }
             }
 
-            // 每次进入消息对话框时
+            // 每次进入消息对话框时,
+            // 只有当agent给用户发一条消息后，用户才能在手机上看到这个agent的消息对话框? 用户如果看不到对话框如何给agent发信息呢?
             if ('enter_agent' == $data['Event']) {
             }
 
@@ -322,9 +326,9 @@ class AgentController extends Controller
 
     /**
      * Agent业务设置(Agent管理后台)URL, 支持$CORPID$变量
-     * http://wxq-admin.buy027.com/index.php?r=agent/backend&agent_sid=ezoa-agent&corpid=$CORPID$
+     * http://wxq-admin.buy027.com/index.php?r=agent/backend&agent_sid=agent-ezoa&corpid=$CORPID$
      *
-     * 例如：http://wxq-admin.buy027.com/index.php?r=agent/backend&agent_sid=ezoa-agent&corpid=wxe675e8d30802ff44&auth_code=t3ArVy4uetdevIg8PBDl9ilL640sQ-Q6mfbQ6o4a8MD6gPu0v55fftS1H0csGmsP6cov69Bd5QV7UuL_PHTxKevZRGTUtQ6QKyfwGVELFxM
+     * 例如：http://wxq-admin.buy027.com/index.php?r=agent/backend&agent_sid=agent-ezoa&corpid=wxe675e8d30802ff44&auth_code=t3ArVy4uetdevIg8PBDl9ilL640sQ-Q6mfbQ6o4a8MD6gPu0v55fftS1H0csGmsP6cov69Bd5QV7UuL_PHTxKevZRGTUtQ6QKyfwGVELFxM
      * @param $agent_sid
      * @return string
      */
@@ -333,14 +337,14 @@ class AgentController extends Controller
         /*
         [
             'r' => 'agent/backend',
-            'agent_sid' => 'ezoa-agent',
+            'agent_sid' => 'agent-ezoa',
             'corpid' => 'wxe675e8d30802ff44',
             'auth_code' => 't3ArVy4uetdevIg8PBDl9ilL640sQ-Q6mfbQ6o4a8MD6gPu0v55fftS1H0csGmsP6cov69Bd5QV7UuL_PHTxKevZRGTUtQ6QKyfwGVELFxM',
         ],
         */
         Yii::error([__METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
 
-        if (empty($corpid = Yii::$app->request->get('corpid'))) {
+        if (empty($corp_id = Yii::$app->request->get('corpid'))) {
             Yii::error(['no corpid parameter', __METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
             throw new Exception('no corpid parameter');
         }
@@ -350,7 +354,7 @@ class AgentController extends Controller
             throw new Exception('no agent_id parameter');
         }
 
-        $corp = Corp::findOne(['corp_id' => $corpid]);
+        $corp = Corp::findOne(['corp_id' => $corp_id]);
         if ($corp === null) {
             Yii::error(['no corp', __METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);
             throw new Exception('no corp');
