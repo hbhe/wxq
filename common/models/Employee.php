@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\base\Exception;
 use yii\db\ActiveRecord;
 
 /**
@@ -102,6 +103,39 @@ class Employee extends \yii\db\ActiveRecord
     public function getDepartments()
     {
         return $this->hasMany(Department::className(), ['id' => 'department_id'])->viaTable('{{%department_employee}}', ['employee_id' => 'id']);
+    }
+
+    public static function importEmployeeOne($corp_id, $row)
+    {
+        $model = Employee::findOne(['corp_id' => $corp_id, 'userid' => $row['userid']);
+        if (null === $model) {
+            $model = new Employee();
+        }
+        $model->setAttributes($row);
+        $model->corp_id = $corp_id;
+        if (!$model->save()) {
+            Yii::error(['save db error', __METHOD__, __LINE__, $model->getErrors()]);
+            throw new Exception('save db error');
+        }
+        $departments = $row['department'];
+        $orders = $row['order'];
+        foreach ($departments as $index => $id) {
+            $department_id = implode('-', [$corp_id, $id]);
+            $ar = DepartmentEmployee::findOne(['department_id' => $department_id, 'employee_id' => $model->id]);
+            if ($ar === null) {
+                $ar = new DepartmentEmployee();
+                $ar->corp_id = $corp_id;
+                $ar->department_id = $department_id;
+                $ar->employee_id = $model->id;
+                $ar->sort_order = empty($orders[$index]) ? 0 : $orders[$index];
+                if (!$ar->save()) {
+                    Yii::error(['save db error', __METHOD__, __LINE__, $ar->getErrors()]);
+                    throw new Exception('save db error');
+                }
+            }
+        }
+
+        return $model;
     }
 
 }

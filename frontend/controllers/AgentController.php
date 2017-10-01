@@ -28,7 +28,7 @@ class AgentController extends Controller
     }
 
     /**
-     * 微信用户，在点击应用(Agent)时进入到主页(即Agent前台)
+     * 员工在微信企业的工作台内，点击应用(Agent)时进入到主页(即Agent前台)
      * http://wxq-frontend.buy027.com/index.php?r=agent/frontend&agent_sid=ezoa-agent&corpid=$CORPID$&agentid=$AGENTID$
      * http://127.0.0.1/wxq/frontend/web/index.php?r=agent/frontend&agent_sid=ezoa-agent&corpid=$CORPID$&agentid=$AGENTID$
      * @return string
@@ -161,18 +161,28 @@ class AgentController extends Controller
             'wxplugin_status' => 1,
         ]
         */
-        Employee::findOne([])
+        $model = Employee::importEmployeeOne($corpid, $userDetail);
+        /*
+        $model = Employee::findOne(['corp_id' => $corpid, 'userid'] => $userDetail['userid']);
+        if (null === $model) {
+            $model = new Employee();
+        }
+        $model->setAttributes($userDetail);
+        if (!$model->save()) {
+            Yii::error([__METHOD__, __LINE__, $model->getErrors()]);
+        }
+        */
         return $this->redirect([$agent_sid]);
     }
 
-    // for agent_sid = demo-agent
-    public function actionDemoAgent()
+    // for agent_sid = agent-demo
+    public function actionAgentDemo()
     {
         return $this->route;
     }
 
-    // for agent_sid = ezoa-agent
-    public function actionEzoaAgent()
+    // for agent_sid = agent-ezoa
+    public function actionAgentEzoa()
     {
         return $this->route;
     }

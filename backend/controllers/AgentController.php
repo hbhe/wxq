@@ -130,7 +130,7 @@ class AgentController extends Controller
     /**
      * 当微信用户发消息时, 每个应用(Agent)都要设置一个处理url来处理消息, 支持$CORPID$模板变量,
      * 不过url参数中corpid有时是服务商的corpid(当有echostr参数时)，有时又是使用者企业corpid(与ToUserName相同)
-     * http://wxq-admin.buy027.com/index.php?r=agent/callback&agent_sid=ezoa-agent&corpid=$CORPID$
+     * http://wxq-admin.buy027.com/index.php?r=agent/callback&agent_sid=agent-ezoa&corpid=$CORPID$
      *
      * @return string
      */

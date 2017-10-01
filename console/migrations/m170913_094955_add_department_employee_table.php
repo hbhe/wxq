@@ -53,7 +53,8 @@ class m170913_094955_add_department_employee_table extends Migration
             'created_at' => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
             'updated_at' => $this->timestamp()->defaultValue(null),
         ], $tableOptions);
-        $this->createIndex('mobile', '{{%employee}}', ['mobile'], true);
+        $this->createIndex('corp_id_mobile', '{{%employee}}', ['corp_id', 'mobile']);
+        $this->createIndex('corp_id_userid', '{{%employee}}', ['corp_id', 'userid']);
 
         $this->createTable('{{%department_employee}}', [
             'id' => $this->primaryKey(),

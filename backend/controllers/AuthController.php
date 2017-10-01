@@ -3,6 +3,7 @@ namespace backend\controllers;
 
 use Yii;
 use yii\base\Exception;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -32,7 +33,7 @@ class AuthController extends Controller
      * @param $suite_sid
      * @return string
      */
-    public function actionIndex($suite_sid)
+    public function actionIndex()
     {
         /*
         [
@@ -42,6 +43,7 @@ class AuthController extends Controller
             'nonce' => '938321678',
             'echostr' => 'pxf6EB5S6EUI4AGyJ+u4WvvQQwDV4yx7KSTmpiwYU3okE5Rm4p/h9PLtSyOZWwOVTWGr7oUJvZFpupeIws5rJg==',
         ],
+        or
         [
             'r' => 'auth',
             'suite_sid' => 'ezoa',
@@ -56,10 +58,26 @@ class AuthController extends Controller
         */
         Yii::error([$_GET, $_POST, file_get_contents("php://input")]);
 
-        $suite = Suite::findOne(['sid' => $suite_sid]);
+        $suite_sid = Yii::$app->request->get('suite_sid');
+        if (!$suite_sid) {
+            // 如果未传suite_sid参数, 直接返回echostr(简洁式接入)
+            if ($echoStr = Yii::$app->request->get('echostr')) {
+                die($echoStr);
+            }
+            $postStr = file_get_contents("php://input");
+            $row = (array)simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
+            if (empty($suite_id = ArrayHelper::getValue($row, 'ToUserName'))) {
+                Yii::error(['no ToUserName!', __METHOD__, __LINE__]);
+                return 'fatal';
+            }
+            $suite = Suite::findOne(['suite_id' => $suite_id]);
+        } else {
+            $suite = Suite::findOne(['sid' => $suite_sid]);
+        }
+
         if (null === $suite) {
-            Yii::error([$_GET, $_POST, file_get_contents("php://input")]);
-            return 'err';
+            Yii::error(['the suite does not exists in db!', $_GET, $_POST, file_get_contents("php://input")]);
+            return 'error';
         }
         $we = $suite->getQyWechat();
         if (!$we->valid()) {
@@ -69,7 +87,7 @@ class AuthController extends Controller
 
         $we->getRev();
         $data = $we->getRevData();
-        Yii::error(['data', $data]);
+        Yii::error(['decrypt data', $data]);
         /*
         Yii::error(['data', $data]);            
         [
@@ -103,8 +121,13 @@ class AuthController extends Controller
         ]        
         */
         if ('suite_ticket' == $data['InfoType']) {
+            // 心跳时刷新suite_ticket
             $suite->suite_ticket = $data['SuiteTicket'];
+            if (!$suite->save()) {
+                Yii::error([__METHOD__, __LINE__, $suite->getErrors()]);
+            }
         } else if ('create_auth' == $data['InfoType']) {
+            // 安装套件
             $arr = $we->getPermanentCode($data['AuthCode']);
             $auth_corp_info = $arr['auth_corp_info'];
             $corp_id = $auth_corp_info['corpid'];
@@ -152,6 +175,7 @@ class AuthController extends Controller
             */
             $authCorpId = $data['AuthCorpId'];
         } else if ('cancel_auth' == $data['InfoType']) {
+            // 用户删除套件
             $authCorpId = $data['AuthCorpId'];
             $SuiteId = $data['SuiteId'];
             $model = CorpSuite::findOne(['corp_id' => $authCorpId, 'suite_id' => $SuiteId]);
@@ -165,10 +189,6 @@ class AuthController extends Controller
             $model = CorpSuite::findOne(['corp_id' => $corp_id, 'suite_id' => $SuiteId]);
             //$accessToken = $model->getAccessToken();
 
-        }
-
-        if (!$suite->save()) {
-            Yii::error([__METHOD__, __LINE__, $suite->getErrors()]);
         }
 
         return 'success';

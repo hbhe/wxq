@@ -242,6 +242,8 @@ class CorpSuite extends \common\wosotech\base\ActiveRecord
         Employee::deleteAll(['corp_id' => $this->corp_id]);
         DepartmentEmployee::deleteAll(['corp_id' => $this->corp_id]);
         foreach ($rows['userlist'] as $row) {
+            Employee::importEmployeeOne($this->corp_id, $row);
+            /*
             $model = new Employee();
             $model->setAttributes($row);
             $model->corp_id = $this->corp_id;
@@ -266,8 +268,9 @@ class CorpSuite extends \common\wosotech\base\ActiveRecord
                     }
                 }
             }
-
+           */
         }
 
     }
+
 }
