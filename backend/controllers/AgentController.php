@@ -127,10 +127,43 @@ class AgentController extends Controller
         }
     }
 
+
+    /*
+    2017-10-01 22:38:37 [101.226.233.157][-][-][error][application] [
+        'backend\\controllers\\AgentController::actionCallback',
+        234,
+        [
+            'r' => 'agent/callback',
+            'agent_sid' => 'agent-ezoa',
+            'corpid' => 'wxe675e8d30802ff44',
+            'msg_signature' => '2fe4dbfca626e4f13bad7ce5afd645374d2430a9',
+            'timestamp' => '1506868717',
+            'nonce' => '1886778183',
+        ],
+        [],
+        '<xml><ToUserName><![CDATA[wxe675e8d30802ff44]]></ToUserName>
+    <Encrypt><![CDATA[6u+n0URVCcf1bzCouChsmX5q2ZnRbJG4/2+d6Y2fm99ZpAl9SyZxfiOyqwC9HB/ocymj66iqAdsuvIPif2RRu8xI/NRSZ4RyMNKPMeL4RghPyvkP1eIqqcC4HZqHODVgEkLvANGzeQhMLApvlbNOQGAh/zJNka+RLIUsJhmLqBdIowQw8fUNPgtd0ONCCsV6Hgq/Fcwscz7oBWXTdGZpdybA8vr8X8yqxmrnjCAaZ+Yfk1ne76lWeUPBaBziGHkHkfMsMw4gSikCTI815wsYbvyWw+NcbrzqrOiDRcLue0j1NGP2l/032cUTH7MUyH93Bh3YbCotIKn0jEeGmT1yS7qseOsuULrtLv98lZyZBpeuJPviSo0oP2FX0/TuQs07]]></Encrypt>
+    <AgentID><![CDATA[1000021]]></AgentID>
+    </xml>',
+    ]
+    2017-10-01 22:38:37 [101.226.233.157][-][-][error][application] [
+        'body',
+        'backend\\controllers\\AgentController::actionCallback',
+        276,
+        [
+            'ToUserName' => 'wxe675e8d30802ff44',
+            'FromUserName' => 'maxcvw',
+            'CreateTime' => '1506868716',
+            'MsgType' => 'event',
+            'AgentID' => '1000021',
+            'Event' => 'subscribe',
+        ],
+    ]
+    */
     /**
      * 当微信用户发消息时, 每个应用(Agent)都要设置一个处理url来处理消息, 支持$CORPID$模板变量,
      * 不过url参数中corpid有时是服务商的corpid(当有echostr参数时)，有时又是使用者企业corpid(与ToUserName相同)
-     * http://wxq-admin.buy027.com/index.php?r=agent/callback&agent_sid=agent-ezoa&corpid=$CORPID$
+     * http://wxq-admin.buy028.com/index.php?r=agent/callback&agent_sid=agent-ezoa&corpid=$CORPID$
      *
      * @return string
      */
