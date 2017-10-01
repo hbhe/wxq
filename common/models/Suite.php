@@ -112,8 +112,11 @@ class Suite extends \yii\db\ActiveRecord
     public function getCorp()
     {
         return $this->hasOne(Corp::className(), ['corp_id' => 'corp_id']);
-    }    
+    }
 
+    /**
+     * @return null|object|\wechat\models\QyWechat
+     */
     public function getQyWechat()
     {
         if (yii::$app->has('QyWechat')) {
