@@ -46,7 +46,8 @@ class Employee extends \yii\db\ActiveRecord
             [['gender', 'isleader', 'status'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['corp_id', 'userid', 'position'], 'string', 'max' => 128],
-            [['name', 'mobile', 'email', 'telephone', 'english_name', 'extattr'], 'string', 'max' => 64],
+            [['name', 'mobile', 'email', 'telephone', 'english_name'], 'string', 'max' => 64],
+            //[['extattr'], 'string', 'max' => 1024],
             [['avatar'], 'string', 'max' => 256],
             [['mobile'], 'unique'],
         ];
