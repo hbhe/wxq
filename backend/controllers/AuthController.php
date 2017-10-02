@@ -65,134 +65,142 @@ class AuthController extends Controller
         $we->getRev();
         $data = $we->getRevData();
         Yii::error(['decrypt data', $data]);
-        /*
-        Yii::error(['data', $data]);            
-        [
-            'SuiteId' => 'tj8c2445c93840db09',
-            'SuiteTicket' => 'J6zl8J5U_tF6Tq6BHI72hdn8Poo7-LIli9p7peAPtr-pVIfsEoAdQRIz3rg-WR_W',
-            'InfoType' => 'suite_ticket',
-            'TimeStamp' => '1492741808',
-            'AgentID' => '',
-        ],     
-        [
-            'SuiteId' => 'tj8c2445c93840db09',
-            'AuthCorpId' => 'wxe675e8d30802ff44',
-            'InfoType' => 'cancel_auth',
-            'TimeStamp' => '1493363816',
-            'AgentID' => '',
-        ],        
-        [
-            'SuiteId' => 'tj8c2445c93840db09',
-            'Seq' => '2',
-            'InfoType' => 'contact_sync',
-            'TimeStamp' => '1493365335',
-            'AuthCorpId' => 'wxe675e8d30802ff44',
-            'AgentID' => '',
-        ],     
-        [
-            'SuiteId' => 'tj8c2445c93840db09',
-            'AuthCode' => 'd8QsSuc2dIjEVZLfONXdGGLeN2ihnQ0RsnENtAgRNrA38IKmjfKv709cWTdQr5_5',
-            'InfoType' => 'create_auth',
-            'TimeStamp' => '1493711908',
-            'AgentID' => '',
-        ]        
-        */
-        if ('suite_ticket' == $data['InfoType']) {
-            // 心跳时刷新suite_ticket
-            $suite->suite_ticket = $data['SuiteTicket'];
-            if (!$suite->save()) {
-                Yii::error([__METHOD__, __LINE__, $suite->getErrors()]);
-            }
-        } else if ('create_auth' == $data['InfoType']) {
-            // 安装套件
-            $arr = $we->getPermanentCode($data['AuthCode']);
-            if (false === $arr) {
-                Yii::error(['getPermanentCode error', __METHOD__, __LINE__]);
-                Yii::$app->end();
-            }
 
-            $auth_corp_info = $arr['auth_corp_info'];
-            $corp_id = $auth_corp_info['corpid'];
-            $auth_info = $arr['auth_info'];
-            $agents = $auth_info['agent'];
-
-            // Save Corp
-            $model = Corp::findOne(['corp_id' => $corp_id]);
-            if (null === $model) {
-                $model = new Corp();
-                $model->corp_id = $corp_id;
-            }
-            $model->setAttributes($auth_corp_info);
-            if (!$model->save(false)) {
-                Yii::error(['save Corp err', __METHOD__, __LINE__, $model->toArray(), $model->getErrors()]);
-                Yii::$app->end();
-            }
-
-            // Save CorpSuite
-            $model = CorpSuite::findOne(['corp_id' => $corp_id, 'suite_id' => $suite->suite_id]);
-            if (null === $model) {
-                $model = new CorpSuite();
-            }
-            $model->corp_id = $corp_id;
-            $model->suite_id = $suite->suite_id;
-            $model->permanent_code = $arr['permanent_code'];
-
-            $model->setAttributes($auth_corp_info);
-            if (!$model->save(false)) {
-                Yii::error(['save CorpSuite err', __METHOD__, __LINE__, $model->toArray(), $model->getErrors()]);
-                Yii::$app->end();
-            }
-
-            // CorpAgent何时创建? 其实可以现在就创建军
-            Yii::error($agents);
-
-            foreach ($agents as $agent) {
-                Yii::error('000000000');
-                $model = CorpAgent::findOne(['corp_id' => $corp_id, 'agentid' => $agent['agentid']]);
-                if (null === $model) {
-                    $model = new CorpAgent();
+        switch ($data['InfoType']) {
+            case 'suite_ticket':
+                // 心跳时刷新suite_ticket
+                /*
+                [
+                    'SuiteId' => 'tj8c2445c93840db09',
+                    'SuiteTicket' => 'J6zl8J5U_tF6Tq6BHI72hdn8Poo7-LIli9p7peAPtr-pVIfsEoAdQRIz3rg-WR_W',
+                    'InfoType' => 'suite_ticket',
+                    'TimeStamp' => '1492741808',
+                    'AgentID' => '',
+                ],
+                */
+                $suite->suite_ticket = $data['SuiteTicket'];
+                if (!$suite->save()) {
+                    Yii::error([__METHOD__, __LINE__, $suite->getErrors()]);
                 }
-                $model->corp_id = $corp_id;
-                $model->agentid = $agent['agentid'];
+                break;
 
-                $model->setAttributes($agent);
-                if (!$model->save(false)) {
-                    Yii::error(['save CorpAgent err', __METHOD__, __LINE__, $model->toArray(), $model->getErrors()]);
+            case 'create_auth':
+                // 客户安装套件时
+                /*
+                [
+                    'SuiteId' => 'tj8c2445c93840db09',
+                    'AuthCode' => 'd8QsSuc2dIjEVZLfONXdGGLeN2ihnQ0RsnENtAgRNrA38IKmjfKv709cWTdQr5_5',
+                    'InfoType' => 'create_auth',
+                    'TimeStamp' => '1493711908',
+                    'AgentID' => '',
+                ]
+                */
+                $arr = $we->getPermanentCode($data['AuthCode']);
+                if (false === $arr) {
+                    Yii::error(['getPermanentCode error', __METHOD__, __LINE__]);
                     Yii::$app->end();
                 }
-            }
-            Yii::error('1111111111111111');
 
-            // test
-            //$accessToken = $model->getSuiteAccessToken();
+                $auth_corp_info = $arr['auth_corp_info'];
+                $corp_id = $auth_corp_info['corpid'];
+                $auth_info = $arr['auth_info'];
+                $agents = $auth_info['agent'];
 
+                // 保存客户信息
+                $model = Corp::findOne(['corp_id' => $corp_id]);
+                if (null === $model) {
+                    $model = new Corp();
+                    $model->corp_id = $corp_id;
+                }
+                $model->setAttributes($auth_corp_info);
+                if (!$model->save(false)) {
+                    Yii::error(['save Corp err', __METHOD__, __LINE__, $model->toArray(), $model->getErrors()]);
+                    Yii::$app->end();
+                }
 
-        } else if ('change_auth' == $data['InfoType']) {
-            /*
-            [
-                'SuiteId' => 'tj6fa3713d6ad487a1',
-                'InfoType' => 'cancel_auth',
-                'TimeStamp' => '1506672838',
-                'AuthCorpId' => 'wxe675e8d30802ff44',
-                'AgentID' => '',
-            ],
-            */
-            $authCorpId = $data['AuthCorpId'];
-        } else if ('cancel_auth' == $data['InfoType']) {
-            // 用户删除订购的套件
-            $authCorpId = $data['AuthCorpId'];
-            $SuiteId = $data['SuiteId'];
-            $model = CorpSuite::findOne(['corp_id' => $authCorpId, 'suite_id' => $SuiteId]);
-            if (null !== $model) {
-                $model->delete();
-            }
+                // 保存客户订购的suite
+                $model = CorpSuite::findOne(['corp_id' => $corp_id, 'suite_id' => $suite->suite_id]);
+                if (null === $model) {
+                    $model = new CorpSuite();
+                }
+                $model->corp_id = $corp_id;
+                $model->suite_id = $suite->suite_id;
+                $model->permanent_code = $arr['permanent_code'];
 
-        } else if ('contact_sync' == $data['InfoType']) {
-            $authCorpId = $data['AuthCorpId'];
-            $SuiteId = $data['SuiteId'];
-            $model = CorpSuite::findOne(['corp_id' => $corp_id, 'suite_id' => $SuiteId]);
-            //$accessToken = $model->getAccessToken();
+                $model->setAttributes($auth_corp_info);
+                if (!$model->save(false)) {
+                    Yii::error(['save CorpSuite err', __METHOD__, __LINE__, $model->toArray(), $model->getErrors()]);
+                    Yii::$app->end();
+                }
 
+                // 先保存agentid, 此时还没有agent_sid, 在agent/callback时才将2者关联起来!
+                foreach ($agents as $agent) {
+                    $model = CorpAgent::findOne(['corp_id' => $corp_id, 'agentid' => $agent['agentid']]);
+                    if (null === $model) {
+                        $model = new CorpAgent();
+                    }
+                    $model->corp_id = $corp_id;
+                    $model->agentid = $agent['agentid'];
+
+                    $model->setAttributes($agent);
+                    if (!$model->save(false)) {
+                        Yii::error(['save CorpAgent err', __METHOD__, __LINE__, $model->toArray(), $model->getErrors()]);
+                        Yii::$app->end();
+                    }
+                }
+                break;
+
+            case 'change_auth':
+                /*
+                [
+                    'SuiteId' => 'tj6fa3713d6ad487a1',
+                    'InfoType' => 'cancel_auth',
+                    'TimeStamp' => '1506672838',
+                    'AuthCorpId' => 'wxe675e8d30802ff44',
+                    'AgentID' => '',
+                ],
+                */
+                $authCorpId = $data['AuthCorpId'];
+                break;
+
+            case 'cancel_auth':
+                // 用户删除订购的套件
+                /*
+                [
+                    'SuiteId' => 'tj8c2445c93840db09',
+                    'AuthCorpId' => 'wxe675e8d30802ff44',
+                    'InfoType' => 'cancel_auth',
+                    'TimeStamp' => '1493363816',
+                    'AgentID' => '',
+                ],
+                */
+                $authCorpId = $data['AuthCorpId'];
+                $SuiteId = $data['SuiteId'];
+                $model = CorpSuite::findOne(['corp_id' => $authCorpId, 'suite_id' => $SuiteId]);
+                if (null !== $model) {
+                    $model->delete();
+                }
+                break;
+
+            case 'contact_sync':
+                /*
+                [
+                    'SuiteId' => 'tj8c2445c93840db09',
+                    'Seq' => '2',
+                    'InfoType' => 'contact_sync',
+                    'TimeStamp' => '1493365335',
+                    'AuthCorpId' => 'wxe675e8d30802ff44',
+                    'AgentID' => '',
+                ],
+                */
+                $authCorpId = $data['AuthCorpId'];
+                $SuiteId = $data['SuiteId'];
+                $model = CorpSuite::findOne(['corp_id' => $corp_id, 'suite_id' => $SuiteId]);
+                //$accessToken = $model->getAccessToken();
+                break;
+
+            default:
+                break;
         }
 
         return 'success';

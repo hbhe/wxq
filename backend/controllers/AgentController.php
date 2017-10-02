@@ -308,54 +308,62 @@ class AgentController extends Controller
         $data = $we->getRevData();
         Yii::error(['body', __METHOD__, __LINE__, $data]);
         if (isset($data['Event'])) {
-            // 员工关注时触发
-            // 但似乎在安装组件时, 系统会模拟一次所有员工向服务器发subscribe事件, why?
-
-            /*
-            if ('subscribe' == $data['Event']) {
-                $model = CorpAgent::findOne(['corp_id' => $data['ToUserName'], 'agent_id' => $agent->id]);
-                if (null === $model) {
-                    $model = new CorpAgent();
-                    $model->corp_id = $data['ToUserName'];
-                    $model->agent_id = $agent->id;
-                    $model->agent_sid = $agent->sid;
-                    if (!$model->save()) {
-                        Yii::error(['save CorpAgent err', __METHOD__, __LINE__, $model->getErrors()]);
-                    } else Yii::error('save CorpAgent ok' . $agent->id);
-                }
-
-                $model = CorpSuite::findOne(['corp_id' => $data['ToUserName'], 'suite_id' => $suite->suite_id]);
-                if (null === $model) {
-                    $model = new CorpSuite();
-                    $model->corp_id = $data['ToUserName'];
-                    $model->suite_id = $suite->suite_id;
-                    if (!$model->save()) {
-                        Yii::error(['save CorpSuite err', __METHOD__, __LINE__, $model->getErrors()]);
+            switch ($data['Event']) {
+                case 'subscribe':
+                    // 将agent_sid与agentid关联起来
+                    $model = CorpAgent::findOne(['corp_id' => $data['ToUserName'], 'agent_sid' => $agent_sid]);
+                    if (null === $model) {
+                        $model = CorpAgent::findOne(['corp_id' => $data['ToUserName'], 'agentid' => $data['AgentID']]);
+                        if (null === $model) {
+                            $model = new CorpAgent();
+                        }
+                        $model->corp_id = $data['ToUserName'];
+                        $model->agent_id = $agent->id;
+                        $model->agent_sid = $agent->sid;
+                        $model->agentid = $data['AgentID'];
+                        if (!$model->save()) {
+                            Yii::error(['save CorpAgent err', __METHOD__, __LINE__, $model->getErrors()]);
+                        }
                     }
-                }
-            }
-            */
 
-            // 每次进入消息对话框时(从微信插件中进入时也收到?)
-            // 只有当agent给用户发一条消息后，用户才能在手机上看到这个agent的消息对话框? 用户如果看不到对话框如何给agent发信息呢?
-            if ('enter_agent' == $data['Event']) {
-            }
+                    /*
+                    $model = CorpSuite::findOne(['corp_id' => $data['ToUserName'], 'suite_id' => $suite->suite_id]);
+                    if (null === $model) {
+                        $model = new CorpSuite();
+                        $model->corp_id = $data['ToUserName'];
+                        $model->suite_id = $suite->suite_id;
+                        if (!$model->save()) {
+                            Yii::error(['save CorpSuite err', __METHOD__, __LINE__, $model->getErrors()]);
+                        }
+                    }
+                    */
+                    break;
 
-            if ('image' == $data['Event']) {
-                /*
-                [
-                    'ToUserName' => 'wxe675e8d30802ff44',
-                    'FromUserName' => 'hhb',
-                    'CreateTime' => '1504690157',
-                    'MsgType' => 'image',
-                    'PicUrl' => 'http://p.qpic.cn/pic_wework/3514736824/abad63a3509c39a1a66ac630c4aac8f28bcf863eb594d283/',
-                    'MsgId' => '1222858184',
-                    'MediaId' => '1OXzjX8lhLIWERInWB7SzeFPmvUug64mjHQ_KnnoD5YM',
-                    'AgentID' => '1000009',
-                ],
-                */
-            }
+                case 'enter_agent':
+                    // 每次进入消息对话框时(从微信插件中进入时也收到?)
+                    // 只有当agent给用户发一条消息后，用户才能在手机上看到这个agent的消息对话框? 用户如果看不到对话框如何给agent发信息呢?
+                    break;
 
+                case 'image':
+                    // 上传图片
+                    /*
+                    [
+                        'ToUserName' => 'wxe675e8d30802ff44',
+                        'FromUserName' => 'hhb',
+                        'CreateTime' => '1504690157',
+                        'MsgType' => 'image',
+                        'PicUrl' => 'http://p.qpic.cn/pic_wework/3514736824/abad63a3509c39a1a66ac630c4aac8f28bcf863eb594d283/',
+                        'MsgId' => '1222858184',
+                        'MediaId' => '1OXzjX8lhLIWERInWB7SzeFPmvUug64mjHQ_KnnoD5YM',
+                        'AgentID' => '1000009',
+                    ],
+                    */
+                    break;
+                    
+                default:
+                    break;
+
+            }
         }
 
         return 'success';

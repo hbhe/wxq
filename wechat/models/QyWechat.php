@@ -369,6 +369,7 @@ class QyWechat
 
     /**
      * 获取微信服务器发来的信息
+     * @return array
      */
     public function getRevData()
     {

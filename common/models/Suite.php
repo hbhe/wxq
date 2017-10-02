@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use wechat\models\QyWechat;
 use Yii;
 
 /**
@@ -133,7 +134,7 @@ class Suite extends \yii\db\ActiveRecord
             'logcallback'=>'yii::error',
         ];
 
-        $we = new \wechat\models\QyWechat($options);
+        $we = new QyWechat($options);
         $we->setSuiteTicket($this->suite_ticket);    
         Yii::$app->set('QyWechat', $we);        
         
