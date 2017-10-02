@@ -359,7 +359,7 @@ class AgentController extends Controller
                     ],
                     */
                     break;
-                    
+
                 default:
                     break;
 

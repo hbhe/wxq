@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'corp_id',
             'agent_id',
             'agent_sid',
-            //'agent.sid:text:Agent SID',
+            'agentid',
             'status',
             'created_at',
             // 'updated_at',
