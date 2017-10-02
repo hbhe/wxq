@@ -373,7 +373,7 @@ class AgentController extends Controller
      * Agent业务设置(Agent管理后台)URL, 支持$CORPID$变量
      * http://wxq-admin.buy027.com/index.php?r=agent/backend&agent_sid=agent-ezoa&corpid=$CORPID$
      *
-     * 例如：http://wxq-admin.buy027.com/index.php?r=agent/backend&agent_sid=agent-ezoa&corpid=wxe675e8d30802ff44&auth_code=t3ArVy4uetdevIg8PBDl9ilL640sQ-Q6mfbQ6o4a8MD6gPu0v55fftS1H0csGmsP6cov69Bd5QV7UuL_PHTxKevZRGTUtQ6QKyfwGVELFxM
+     * 例如：http://wxq-admin.buy027.com/index.php?r=agent/backend&agent_sid=agent-ezoa&corpid=wxe675e8d30802ff44&auth_code=xxx
      * @param $agent_sid
      * @return string
      */
@@ -384,7 +384,7 @@ class AgentController extends Controller
             'r' => 'agent/backend',
             'agent_sid' => 'agent-ezoa',
             'corpid' => 'wxe675e8d30802ff44',
-            'auth_code' => 't3ArVy4uetdevIg8PBDl9ilL640sQ-Q6mfbQ6o4a8MD6gPu0v55fftS1H0csGmsP6cov69Bd5QV7UuL_PHTxKevZRGTUtQ6QKyfwGVELFxM',
+            'auth_code' => 'xxxxx',
         ],
         */
         Yii::error([__METHOD__, __LINE__, $_GET, $_POST, file_get_contents("php://input")]);

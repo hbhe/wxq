@@ -107,7 +107,7 @@ class Employee extends \yii\db\ActiveRecord
 
     public static function importEmployeeOne($corp_id, $row)
     {
-        $model = Employee::findOne(['corp_id' => $corp_id, 'userid' => $row['userid']);
+        $model = Employee::findOne(['corp_id' => $corp_id, 'userid' => $row['userid']]);
         if (null === $model) {
             $model = new Employee();
         }
