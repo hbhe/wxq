@@ -4,7 +4,9 @@ namespace common\models;
 
 use Yii;
 use yii\base\Exception;
+use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "{{%employee}}".
@@ -26,8 +28,11 @@ use yii\db\ActiveRecord;
  * @property string $created_at
  * @property string $updated_at
  */
-class Employee extends \yii\db\ActiveRecord
+class Employee extends \yii\db\ActiveRecord implements IdentityInterface
 {
+    const STATUS_SUBSCRIBED = 1;
+    const STATUS_DISABLED = 2;
+    const STATUS_UNSUBSCRIBED = 4;
     /**
      * @inheritdoc
      */
@@ -72,7 +77,7 @@ class Employee extends \yii\db\ActiveRecord
             'extattr' => '扩展属性',
             'gender' => '性别',
             'isleader' => '是否为上级',
-            'status' => '状态',
+            'status' => '状态', // 关注状态: 1=已关注，2=已禁用，4=未关注
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
@@ -137,6 +142,40 @@ class Employee extends \yii\db\ActiveRecord
         }
 
         return $model;
+    }
+
+    public static function findIdentity($id)
+    {
+        return static::findOne(['id' => $id, 'status' => self::STATUS_SUBSCRIBED]);
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getId()
+    {
+        return $this->getPrimaryKey();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAuthKey()
+    {
+        return md5($this->corp_id . $this->userid);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function validateAuthKey($authKey)
+    {
+        return $this->getAuthKey() === $authKey;
     }
 
 }

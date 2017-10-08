@@ -161,24 +161,18 @@ class AgentController extends Controller
             'wxplugin_status' => 1,
         ]
         */
+
         $model = Employee::importEmployeeOne($corpid, $userDetail);
-        /*
-        $model = Employee::findOne(['corp_id' => $corpid, 'userid'] => $userDetail['userid']);
-        if (null === $model) {
-            $model = new Employee();
+        if (null === $model || !Yii::$app->user->login($model)) {
+            return 'Invalid account.';
         }
-        $model->setAttributes($userDetail);
-        if (!$model->save()) {
-            Yii::error([__METHOD__, __LINE__, $model->getErrors()]);
-        }
-        */
         return $this->redirect([$agent_sid]);
     }
 
     // for agent_sid = agent-demo
     public function actionAgentDemo()
     {
-        return $this->route;
+        return "hello";
     }
 
     // for agent_sid = agent-ezoa
