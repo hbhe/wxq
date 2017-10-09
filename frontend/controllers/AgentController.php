@@ -7,6 +7,8 @@ use common\models\CorpSuite;
 use common\models\Employee;
 use Yii;
 use yii\base\Exception;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\web\Controller;
 
@@ -15,6 +17,33 @@ use yii\web\Controller;
  */
 class AgentController extends Controller
 {
+/*
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['frontend'],
+                        'allow' => true,
+                        'roles' => ['?', '@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+        ];
+    }
+*/
     /**
      * @inheritdoc
      */
@@ -164,6 +193,7 @@ class AgentController extends Controller
 
         $model = Employee::importEmployeeOne($corpid, $userDetail);
         if (null === $model || !Yii::$app->user->login($model)) {
+            Yii::error(['invalid account', __METHOD__, __LINE__]);
             return 'Invalid account.';
         }
         return $this->redirect([$agent_sid]);
@@ -172,12 +202,12 @@ class AgentController extends Controller
     // for agent_sid = agent-demo
     public function actionAgentDemo()
     {
-        return "hello";
+        return 'hello,' . Yii::$app->user->name;
     }
 
     // for agent_sid = agent-ezoa
     public function actionAgentEzoa()
     {
-        return $this->route;
+        return Yii::$app->user->name . $this->route;
     }
 }

@@ -146,7 +146,8 @@ class Employee extends \yii\db\ActiveRecord implements IdentityInterface
 
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_SUBSCRIBED]);
+        //return static::findOne(['id' => $id, 'status' => self::STATUS_SUBSCRIBED]);
+        return static::findOne(['id' => $id]);
     }
 
     public static function findIdentityByAccessToken($token, $type = null)
