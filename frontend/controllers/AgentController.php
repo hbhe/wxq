@@ -202,12 +202,12 @@ class AgentController extends Controller
     // for agent_sid = agent-demo
     public function actionAgentDemo()
     {
-        return 'hello,' . Yii::$app->user->name;
+        return 'hello,' . Yii::$app->user->identity->name;
     }
 
     // for agent_sid = agent-ezoa
     public function actionAgentEzoa()
     {
-        return Yii::$app->user->name . $this->route;
+        return Yii::$app->user->identity->name . $this->route;
     }
 }
