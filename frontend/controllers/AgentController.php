@@ -57,9 +57,9 @@ class AgentController extends Controller
     }
 
     /**
-     * 员工在微信企业的工作台内，点击应用(Agent)时进入到主页(即Agent前台)
-     * http://wxq-frontend.buy027.com/index.php?r=agent/frontend&agent_sid=ezoa-agent&corpid=$CORPID$&agentid=$AGENTID$
-     * http://127.0.0.1/wxq/frontend/web/index.php?r=agent/frontend&agent_sid=ezoa-agent&corpid=$CORPID$&agentid=$AGENTID$
+     * 员工在微信企业的工作台内，点击应用(Agent)时进入到主页(即Agent前台), 比如agent_sid是agent-demo, 则登录后跳转到对应的AgentDemoController.php的actionIndex()
+     * http://wxq-frontend.buy028.com/index.php?r=agent/frontend&agent_sid=agent-ezoa&corpid=$CORPID$&agentid=$AGENTID$
+     * http://127.0.0.1/wxq/frontend/web/index.php?r=agent/frontend&agent_sid=agent-ezoa&corpid=$CORPID$&agentid=$AGENTID$
      * @return string
      */
     public function actionFrontend()
@@ -67,7 +67,7 @@ class AgentController extends Controller
         /*
         [
             'r' => 'agent/frontend',
-            'agent_sid' => 'ezoa-agent',
+            'agent_sid' => 'agent-demo',
             'corpid' => 'wxe675e8d30802ff44',
             'agentid' => '1000007',
         ],
@@ -193,21 +193,11 @@ class AgentController extends Controller
 
         $model = Employee::importEmployeeOne($corpid, $userDetail);
         if (null === $model || !Yii::$app->user->login($model)) {
-            Yii::error(['invalid account', __METHOD__, __LINE__]);
-            return 'Invalid account.';
+            Yii::error(['invalid account or login failed.', __METHOD__, __LINE__]);
+            return 'Invalid account or login failed.';
         }
-        return $this->redirect([$agent_sid]);
+
+        return $this->redirect(["/{$agent_sid}"]);
     }
 
-    // for agent_sid = agent-demo
-    public function actionAgentDemo()
-    {
-        return 'hello,' . Yii::$app->user->identity->name;
-    }
-
-    // for agent_sid = agent-ezoa
-    public function actionAgentEzoa()
-    {
-        return Yii::$app->user->identity->name . $this->route;
-    }
 }
