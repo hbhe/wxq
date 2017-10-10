@@ -197,7 +197,7 @@ class AgentController extends Controller
             return 'Invalid account or login failed.';
         }
 
-        return $this->redirect(["/{$agent_sid}"]);
+        return $this->redirect(['/' . $agent_sid]);
     }
 
 }
