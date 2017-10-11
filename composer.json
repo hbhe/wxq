@@ -41,9 +41,7 @@
         "yii2tech/file-storage": "^1.1",
         "creocoder/yii2-flysystem": "^0.9.0",
         "league/flysystem-sftp": "^1.0",
-        "trntv/yii2-file-kit": "^1.2",
-        "yiier/yii2-aliyun-oss": "*",
-        "zircote/swagger-php": "^2.0"
+        "trntv/yii2-file-kit": "^1.2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
