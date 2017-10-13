@@ -7,6 +7,22 @@ $bundle = yii::$app->assetManager->getBundle(\frontend\assets\AgentAsset::classN
 ?>
 <?php $this->title = '发消息' ?>
 
+<?=  \common\widgets\JsTree::widget([
+    'name' => 'js_tree',
+    'core' => [
+        'check_callback' => true,
+        'data' => [
+            ['id' => 'ajson1', 'parent' => '#', 'text' => '根结点'],
+            ['id' => 'ajson2', 'parent' => '#', 'text' => '根结点2'],
+            ['id' => 'ajson3', 'parent' => 'ajson2', 'text' => '儿子1'],
+            ['id' => 'ajson4', 'parent' => 'ajson2', 'text' => 'child2'],
+        ]
+    ],
+    //'plugins' => ['types', 'dnd', 'contextmenu', 'wholerow', 'state', 'checkbox'],
+    'plugins' => ['types', 'dnd', 'contextmenu', 'state', 'checkbox'],
+
+]); ?>
+
 <div class="page">
 
     <div class="page__bd">
