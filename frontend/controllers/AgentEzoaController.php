@@ -71,6 +71,8 @@ class AgentEzoaController extends Controller
             Yii::error(['get data', $model->toArray()]);
             return $this->redirect(['index']);
         }
+        $model->status = 0;
+
         return $this->render('send-message', [
             'jsTreeData' => $jsTreeData,
             'model' => $model,

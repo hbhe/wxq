@@ -81,8 +81,8 @@ $bundle = yii::$app->assetManager->getBundle(\frontend\assets\AgentAsset::classN
                     <span class="weui-icon-checked"></span>
                 </div>
             </label>
-            <label class="weui-cell weui-check__label" for="x12">
 
+            <label class="weui-cell weui-check__label" for="x12">
                 <div class="weui-cell__bd">
                     <p>cell standard</p>
                 </div>
@@ -95,6 +95,7 @@ $bundle = yii::$app->assetManager->getBundle(\frontend\assets\AgentAsset::classN
                 <div class="weui-cell__bd">添加更多</div>
             </a>
         </div>
+
         <div class="weui-cells__title">复选列表项</div>
         <div class="weui-cells weui-cells_checkbox">
             <label class="weui-cell weui-check__label" for="s11">
@@ -122,45 +123,60 @@ $bundle = yii::$app->assetManager->getBundle(\frontend\assets\AgentAsset::classN
 
         <div class="weui-cells__title">表单</div>
         <div class="weui-cells weui-cells_form">
+
             <div class="weui-cell">
-                <div class="weui-cell__hd"><label class="weui-label">qq</label></div>
+                <div class="weui-cell__hd"><label class="weui-label">QQ号码</label></div>
                 <div class="weui-cell__bd">
+                    <!--
                     <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入qq号"/>
+                    -->
+                    <?php echo $form->field($model, 'corp_id')->textInput(['class' => 'weui-input', 'type' => 'number', 'pattern' => '1[0-9]*', 'placeholder' => '请输入qq号']) ?>
                 </div>
             </div>
+
             <div class="weui-cell weui-cell_vcode">
                 <div class="weui-cell__hd">
                     <label class="weui-label">手机号</label>
                 </div>
                 <div class="weui-cell__bd">
+                    <!--
                     <input class="weui-input" type="tel" placeholder="请输入手机号"/>
+                    -->
+                    <?php echo $form->field($model, 'corp_id')->textInput(['class' => 'weui-input', 'type' => 'tel', 'pattern' => '1[0-9]*', 'placeholder' => '请输入手机号码']) ?>
                 </div>
                 <div class="weui-cell__ft">
                     <button class="weui-vcode-btn">获取验证码</button>
                 </div>
             </div>
+
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label for="" class="weui-label">日期</label></div>
                 <div class="weui-cell__bd">
                     <input class="weui-input" type="date" value=""/>
                 </div>
             </div>
+
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label for="" class="weui-label">时间</label></div>
                 <div class="weui-cell__bd">
                     <input class="weui-input" type="datetime-local" value="" placeholder=""/>
                 </div>
             </div>
+
             <div class="weui-cell weui-cell_vcode">
                 <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
                 <div class="weui-cell__bd">
+                    <!--
                     <input class="weui-input" type="number" placeholder="请输入验证码"/>
+                    -->
+                    <?php echo $form->field($model, 'corp_id')->textInput(['class' => 'weui-input', 'type' => 'number', 'pattern' => '1[0-9]*', 'placeholder' => '请输入验证码']) ?>
                 </div>
                 <div class="weui-cell__ft">
                     <img class="weui-vcode-img" src="./images/vcode.jpg" />
                 </div>
             </div>
         </div>
+
         <div class="weui-cells__tips">底部说明文字底部说明文字</div>
 
         <div class="weui-cells__title">表单报错</div>
@@ -168,7 +184,11 @@ $bundle = yii::$app->assetManager->getBundle(\frontend\assets\AgentAsset::classN
             <div class="weui-cell weui-cell_warn">
                 <div class="weui-cell__hd"><label for="" class="weui-label">卡号</label></div>
                 <div class="weui-cell__bd">
+                    <!--
                     <input class="weui-input" type="number" pattern="[0-9]*" value="weui input error" placeholder="请输入卡号"/>
+                    -->
+                    <?php echo $form->field($model, 'corp_id')->textInput(['class' => 'weui-input', 'type' => 'number', 'pattern' => '[0-9]*', 'placeholder' => '请输入卡号']) ?>
+
                 </div>
                 <div class="weui-cell__ft">
                     <i class="weui-icon-warn"></i>
@@ -180,16 +200,24 @@ $bundle = yii::$app->assetManager->getBundle(\frontend\assets\AgentAsset::classN
         <div class="weui-cells__title">开关</div>
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell weui-cell_switch">
-                <div class="weui-cell__bd">标题文字</div>
+                <div class="weui-cell__bd">勾选</div>
                 <div class="weui-cell__ft">
+                    <!--
                     <input class="weui-switch" type="checkbox"/>
+                    -->
+                    <?php echo $form->field($model, 'status')->checkbox(['class' => 'weui-switch'], false) ?>
+
                 </div>
             </div>
             <div class="weui-cell weui-cell_switch">
-                <div class="weui-cell__bd">兼容IE Edge的版本</div>
+                <div class="weui-cell__bd">切换按钮1</div>
                 <div class="weui-cell__ft">
                     <label for="switchCP" class="weui-switch-cp">
+<!--
                         <input id="switchCP" class="weui-switch-cp__input" type="checkbox" checked="checked"/>
+-->
+                        <?php echo $form->field($model, 'status')->checkbox(['id' => 'switchCP', 'class' => 'weui-switch-cp__input'], false) ?>
+
                         <div class="weui-switch-cp__box"></div>
                     </label>
                 </div>
@@ -220,41 +248,62 @@ $bundle = yii::$app->assetManager->getBundle(\frontend\assets\AgentAsset::classN
 
             <div class="weui-cell weui-cell_select weui-cell_select-before">
                 <div class="weui-cell__hd">
+                    <!--
                     <select class="weui-select" name="select2">
                         <option value="1">+86</option>
                         <option value="2">+80</option>
                         <option value="3">+84</option>
                         <option value="4">+87</option>
                     </select>
+                    -->
+                    <?= $form->field($model, 'corp_id')->dropDownList(\common\wosotech\Util::getYesNoOptionName(), ['class' => 'weui-select']) ?>
+
                 </div>
                 <div class="weui-cell__bd">
+                    <!--
                     <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入号码"/>
+                    -->
+                    <?php echo $form->field($model, 'corp_id')->textInput(['class' => 'weui-input', 'maxlength' => true, 'type' => 'number', 'pattern' => '[0-9]*', 'placeholder' => '请输入号码']) ?>
                 </div>
             </div>
         </div>
-        <div class="weui-cells__title">选择</div>
+        <div class="weui-cells__title">联系方式</div>
         <div class="weui-cells">
             <div class="weui-cell weui-cell_select">
                 <div class="weui-cell__bd">
+                    <!--
                     <select class="weui-select" name="select1">
                         <option selected="" value="1">微信号</option>
                         <option value="2">QQ号</option>
                         <option value="3">Email</option>
                     </select>
+                    -->
+                    <?= $form->field($model, 'corp_id')->dropDownList(\common\wosotech\Util::getYesNoOptionName(), ['class' => 'weui-select']) ?>
+
                 </div>
             </div>
+
             <div class="weui-cell weui-cell_select weui-cell_select-after">
                 <div class="weui-cell__hd">
                     <label for="" class="weui-label">国家/地区</label>
                 </div>
                 <div class="weui-cell__bd">
+                    <!--
                     <select class="weui-select" name="select2">
                         <option value="1">中国</option>
                         <option value="2">美国</option>
                         <option value="3">英国</option>
                     </select>
+                    -->
+                    <?= $form->field($model, 'corp_id')->dropDownList(\yii\helpers\ArrayHelper::map(
+                        \common\models\Suite::find()->where(['corp_id' => yii::$app->params['corp_id']])->all(),
+                        'suite_id',
+                        'sid'
+                    ), ['prompt'=>'---', 'class' => 'weui-select']) ?>
+
                 </div>
             </div>
+
         </div>
 
         <label for="weuiAgree" class="weui-agree">
