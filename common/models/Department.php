@@ -3,6 +3,7 @@
 namespace common\models;
 
 use paulzi\adjacencyList\AdjacencyListBehavior;
+use paulzi\adjacencyList\AdjacencyListQueryTrait;
 use Yii;
 
 /**
@@ -52,6 +53,7 @@ class Department extends \yii\db\ActiveRecord
         ];
     }
 
+    use AdjacencyListQueryTrait;
     public function behaviors()
     {
         return [
@@ -76,4 +78,46 @@ class Department extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Employee::className(), ['id' => 'employee_id'])->viaTable('{{%department_employee}}', ['department_id' => 'id']);
     }
+
+    /**
+     * @param bool $withEmployee
+     * @return array
+     */
+    public function getTree($withEmployee = true)
+    {
+        $arr = $this->toArray();
+        if ($withEmployee) {
+            foreach ($this->employees as $employee) {
+                $arr['employees'][] = $employee->toArray();
+            }
+        }
+        foreach ($this->children as $child) {
+            $arr['children'][] = $child->getTree();
+        }
+        return $arr;
+    }
+
+    public function getJSTreeData($withEmployee = true)
+    {
+        $arr = [
+            'id' => $this->id,
+            'text' => $this->name,
+            'a_attr' => $this->toArray(),
+        ];
+        if ($withEmployee) {
+            foreach ($this->employees as $employee) {
+                $arr['children'][] = [
+                    'id' => $employee->id,
+                    'text' => $employee->name,
+                    'a_attr' => $this->toArray(),
+                    'type' => 'employee',
+                ];
+            }
+        }
+        foreach ($this->children as $child) {
+            $arr['children'][] = $child->getJSTreeData();
+        }
+        return $arr;
+    }
+
 }

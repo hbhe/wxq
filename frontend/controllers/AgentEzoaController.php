@@ -4,6 +4,7 @@ namespace frontend\controllers;
 use common\models\Agent;
 use common\models\Corp;
 use common\models\CorpSuite;
+use common\models\Department;
 use common\models\Employee;
 use Yii;
 use yii\base\Exception;
@@ -60,8 +61,20 @@ class AgentEzoaController extends Controller
 
     public function actionSendMessage()
     {
-        //return Yii::$app->user->identity->name . $this->route;
-        return $this->render('send-message');
+        $parent = Department::findOne(['parent_id' => null]);
+        $parent->populateTree();
+        $jsTreeData = $parent->getJSTreeData();
+        //Yii::error($jsTreeData);
+
+        $model = new Employee();
+        if ($model->load(Yii::$app->request->post())) {
+            Yii::error(['get data', $model->toArray()]);
+            return $this->redirect(['index']);
+        }
+        return $this->render('send-message', [
+            'jsTreeData' => $jsTreeData,
+            'model' => $model,
+        ]);
     }
 
 }

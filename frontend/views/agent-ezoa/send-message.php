@@ -4,25 +4,278 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 $bundle = yii::$app->assetManager->getBundle(\frontend\assets\AgentAsset::className());
+\yii\bootstrap\BootstrapAsset::register($this);
 ?>
 <?php $this->title = '发消息' ?>
 
+<?php $form = ActiveForm::begin([
+    'enableClientScript' => false,
+    'fieldConfig' => [
+        'template' => "{input}{error}",
+        //'template' => "{input}",
+        'options' => ['tag' => false],
+    ],
+]); ?>
+
 <?=  \common\widgets\JsTree::widget([
+    'options' => [
+        'id' => 'tree_id',
+    ],
     'name' => 'js_tree',
     'core' => [
-        'check_callback' => true,
+        //'check_callback' => true,
+        //'multiple' => false,
+        /*
         'data' => [
             ['id' => 'ajson1', 'parent' => '#', 'text' => '根结点'],
             ['id' => 'ajson2', 'parent' => '#', 'text' => '根结点2'],
             ['id' => 'ajson3', 'parent' => 'ajson2', 'text' => '儿子1'],
-            ['id' => 'ajson4', 'parent' => 'ajson2', 'text' => 'child2'],
+            ['id' => 'ajson4', 'parent' => 'ajson2', 'text' => 'child2', 'icon' => '', ],
+        ],
+
+        'data' => [
+            ['id' => 'ajson-1', 'text' => '根结点-1', ],
+            ['id' => 'ajson-2', 'text' => '根结点-2', 'children' => [
+                ['id' => 'ajson3', 'children' => [], 'text' => '儿子1'],
+                ['id' => 'ajson4', 'children' => [], 'text' => 'child2', 'icon' => ''],
+            ]],
+        ],
+        'data' => [
+            'url' => \yii\helpers\Url::to(['ajax/tree']),
+        ],
+
+        'themes' => [
+            'name' => 'foobar',
+            'url' => "/themes/foobar/js/jstree3/style.css",
+            'dots' => true,
+            'icons' => false,
         ]
+
+        */
+        'data' => $jsTreeData,
     ],
-    //'plugins' => ['types', 'dnd', 'contextmenu', 'wholerow', 'state', 'checkbox'],
-    'plugins' => ['types', 'dnd', 'contextmenu', 'state', 'checkbox'],
+    'types' => [
+        'default' => [
+        ],
+        'employee' => [
+            'icon' => 'glyphicon glyphicon-user',
+        ],
+    ],
+
+    'plugins' => ['types', 'dnd', 'contextmenu', 'wholerow', 'state', 'checkbox'],
 
 ]); ?>
 
+<div class="page">
+
+    <div class="page__bd">
+
+        <div class="weui-cells__title">单选列表项</div>
+        <div class="weui-cells weui-cells_radio">
+            <label class="weui-cell weui-check__label" for="x11">
+                <div class="weui-cell__bd">
+                    <p>cell standard</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" class="weui-check" name="radio1" id="x11"/>
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+            <label class="weui-cell weui-check__label" for="x12">
+
+                <div class="weui-cell__bd">
+                    <p>cell standard</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" name="radio1" class="weui-check" id="x12" checked="checked"/>
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+            <a href="javascript:void(0);" class="weui-cell weui-cell_link">
+                <div class="weui-cell__bd">添加更多</div>
+            </a>
+        </div>
+        <div class="weui-cells__title">复选列表项</div>
+        <div class="weui-cells weui-cells_checkbox">
+            <label class="weui-cell weui-check__label" for="s11">
+                <div class="weui-cell__hd">
+                    <input type="checkbox" class="weui-check" name="checkbox1" id="s11" checked="checked"/>
+                    <i class="weui-icon-checked"></i>
+                </div>
+                <div class="weui-cell__bd">
+                    <p>standard is dealt for u.</p>
+                </div>
+            </label>
+            <label class="weui-cell weui-check__label" for="s12">
+                <div class="weui-cell__hd">
+                    <input type="checkbox" name="checkbox1" class="weui-check" id="s12"/>
+                    <i class="weui-icon-checked"></i>
+                </div>
+                <div class="weui-cell__bd">
+                    <p>standard is dealicient for u.</p>
+                </div>
+            </label>
+            <a href="javascript:void(0);" class="weui-cell weui-cell_link">
+                <div class="weui-cell__bd">添加更多</div>
+            </a>
+        </div>
+
+        <div class="weui-cells__title">表单</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">qq</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入qq号"/>
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_vcode">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">手机号</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="tel" placeholder="请输入手机号"/>
+                </div>
+                <div class="weui-cell__ft">
+                    <button class="weui-vcode-btn">获取验证码</button>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label for="" class="weui-label">日期</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="date" value=""/>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label for="" class="weui-label">时间</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="datetime-local" value="" placeholder=""/>
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_vcode">
+                <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" placeholder="请输入验证码"/>
+                </div>
+                <div class="weui-cell__ft">
+                    <img class="weui-vcode-img" src="./images/vcode.jpg" />
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells__tips">底部说明文字底部说明文字</div>
+
+        <div class="weui-cells__title">表单报错</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_warn">
+                <div class="weui-cell__hd"><label for="" class="weui-label">卡号</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" pattern="[0-9]*" value="weui input error" placeholder="请输入卡号"/>
+                </div>
+                <div class="weui-cell__ft">
+                    <i class="weui-icon-warn"></i>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="weui-cells__title">开关</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_switch">
+                <div class="weui-cell__bd">标题文字</div>
+                <div class="weui-cell__ft">
+                    <input class="weui-switch" type="checkbox"/>
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_switch">
+                <div class="weui-cell__bd">兼容IE Edge的版本</div>
+                <div class="weui-cell__ft">
+                    <label for="switchCP" class="weui-switch-cp">
+                        <input id="switchCP" class="weui-switch-cp__input" type="checkbox" checked="checked"/>
+                        <div class="weui-switch-cp__box"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="weui-cells__title">文本框</div>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入文本"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="weui-cells__title">文本域</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea class="weui-textarea" placeholder="请输入文本" rows="3"></textarea>
+                    <div class="weui-textarea-counter"><span>0</span>/200</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="weui-cells__title">选择</div>
+        <div class="weui-cells">
+
+            <div class="weui-cell weui-cell_select weui-cell_select-before">
+                <div class="weui-cell__hd">
+                    <select class="weui-select" name="select2">
+                        <option value="1">+86</option>
+                        <option value="2">+80</option>
+                        <option value="3">+84</option>
+                        <option value="4">+87</option>
+                    </select>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入号码"/>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells__title">选择</div>
+        <div class="weui-cells">
+            <div class="weui-cell weui-cell_select">
+                <div class="weui-cell__bd">
+                    <select class="weui-select" name="select1">
+                        <option selected="" value="1">微信号</option>
+                        <option value="2">QQ号</option>
+                        <option value="3">Email</option>
+                    </select>
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_select weui-cell_select-after">
+                <div class="weui-cell__hd">
+                    <label for="" class="weui-label">国家/地区</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" name="select2">
+                        <option value="1">中国</option>
+                        <option value="2">美国</option>
+                        <option value="3">英国</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <label for="weuiAgree" class="weui-agree">
+            <input id="weuiAgree" type="checkbox" class="weui-agree__checkbox"/>
+            <span class="weui-agree__text">
+                阅读并同意<a href="javascript:void(0);">《相关条款》</a>
+            </span>
+        </label>
+
+        <div class="weui-btn-area">
+            <a class="weui-btn weui-btn_primary" href="javascript:" id="showTooltips">确定</a>
+        </div>
+
+
+    </div>
+
+
+</div>
+<?php ActiveForm::end(); ?>
+
+<?php /*
 <div class="page">
 
     <div class="page__bd">
@@ -111,11 +364,12 @@ $bundle = yii::$app->assetManager->getBundle(\frontend\assets\AgentAsset::classN
                 <a id="formSubmitBtn" href="javascript:" class="weui-btn weui-btn_primary">提交</a>
             </div>
         </div>
-        
+
     </div>
 
 
 </div>
+
 <script type="text/javascript">
 
 $("#id-div-tel-err").hide();
@@ -250,3 +504,4 @@ $(document).ready(function () {
 
 
 </script>
+*/
