@@ -42,7 +42,9 @@
         "creocoder/yii2-flysystem": "^0.9.0",
         "league/flysystem-sftp": "^1.0",
         "trntv/yii2-file-kit": "^1.2",
-        "phpoffice/phpword": "v0.13.*"
+        "phpoffice/phpword": "v0.13.*",
+        "phpoffice/phpexcel": "~1.8",
+        "vakata/jstree": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
