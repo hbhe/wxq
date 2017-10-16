@@ -101,7 +101,7 @@ $bundle = yii::$app->assetManager->getBundle(\frontend\assets\AgentAsset::classN
 
 </div>
 <script type="text/javascript">
-
+/*
 $("#id-div-tel-err").hide();
 
 function vTele() {
@@ -232,5 +232,5 @@ $(document).ready(function () {
 
 });
 
-
+*/
 </script>
